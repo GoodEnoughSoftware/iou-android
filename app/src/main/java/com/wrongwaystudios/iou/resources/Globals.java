@@ -16,4 +16,7 @@ public class Globals {
 
     public static final String BASE_API_URL = "http://ericwadkins.com/";
 
+    public static OAuthObject authObject = null;
+    public static User mainUser = null;
+
 }

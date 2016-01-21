@@ -10,6 +10,12 @@
     <!-- Strings related to login -->
     <string name="login_username">Username</string>
     <string name="login_password">Password</string>
+    <string name="login_password_reenter">Re-enter Password</string>
     <string name="login_signin">Sign In</string>
     <string name="login_signup">Sign Up</string>
+    <string name="login_remember">Remember my login</string>
+
+    <!-- Strings related to sign up -->
+    <string name="signup_clear">Clear All</string>
+
 </resources>

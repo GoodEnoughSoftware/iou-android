@@ -37,12 +37,12 @@
         app:met_underlineColor="#ffffff"
         app:met_floatingLabelTextColor="#ffffff"
         android:layout_marginTop="65dp"
-        android:id="@+id/password_edit"
+        android:id="@+id/username_edit"
         android:layout_below="@+id/imageView2"
         android:layout_centerHorizontal="true"/>
 
     <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/username_edit"
+        android:id="@+id/password_edit"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="@string/login_password"
@@ -56,8 +56,9 @@
         app:met_underlineColor="#ffffff"
         app:met_floatingLabelTextColor="#ffffff"
         android:textColor="@android:color/white"
-        android:layout_below="@+id/password_edit"
-        android:layout_alignStart="@+id/password_edit"/>
+        android:inputType="textPassword"
+        android:layout_below="@+id/username_edit"
+        android:layout_alignStart="@+id/username_edit"/>
 
     <mehdi.sakout.fancybuttons.FancyButton
         android:id="@+id/btn_sign_in"
@@ -75,7 +76,7 @@
         fancy:fb_text="@string/login_signin"
         fancy:fb_textColor="#FFFFFF"
         fancy:fb_textSize="18dp"
-        android:layout_below="@+id/username_edit"
+        android:layout_below="@+id/password_edit"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"/>
 
@@ -98,5 +99,19 @@
         android:layout_below="@+id/btn_sign_in"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"/>
+
+    <com.github.jlmd.animatedcircleloadingview.AnimatedCircleLoadingView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/circle_loading_view"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:background="#00000000"
+        app:mainColor="@color/colorAccent"
+        app:secondaryColor="@color/colorPrimaryDark"
+        app:textColor="@android:color/white"
+        android:layout_below="@+id/password_edit"
+        android:layout_alignStart="@+id/btn_sign_in"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

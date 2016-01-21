@@ -26,6 +26,10 @@
         </activity>
         <activity android:name=".LoginActivity">
         </activity>
+        <activity android:name=".SignUpActivity"
+                  android:label="@string/login_signup"
+                  android:parentActivityName=".LoginActivity">
+        </activity>
     </application>
 
 </manifest>

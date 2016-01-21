@@ -20,20 +20,22 @@ public class OAuthObject {
     private Context appContext = null;
 
     private String accessToken = null;
-    private int expirationTime = -1;
+    private long expirationTime = -1;
     private boolean valid = false;
     private String username = null;
     private String password = null;
 
     // Constants used in URL building and field building / retrieval
-    private final String BASE_OAUTH_URL = "/oauth/token/";
+    private final String BASE_OAUTH_URL = "oauth/token/";
     private final String grantTypeField = "grant_type";         private final String grantType = "password";
     private final String clientIdField = "client_id";
     private final String clientSecretField = "client_secret";
     private final String usernameField = "username";
     private final String passwordField = "password";
     private final String accessTokenField = "access_token";
-    private final String expirationField = "";
+    private final String expirationField = "expires_in";
+
+    private String lastError = null;
 
     /**
      * Creates an OAuth Object with the given username
@@ -51,10 +53,14 @@ public class OAuthObject {
      * and otherwise by checking. Then saves the result. Run this
      * off of the UI thread
      */
-    public void authorize(){
+    public void authorize(boolean noLocalLoad){
 
         // First, attempt to load OAuth from the prefs
-        loadOAuthFromPrefs(this.appContext);
+        if(!noLocalLoad){
+            loadOAuthFromPrefs(this.appContext);
+        }
+
+        Log.e("AUTHOR", "Auth is valid: " + valid);
 
         // If not yet valid, download the access token
         if(!valid) {
@@ -83,7 +89,25 @@ public class OAuthObject {
         data += username + ":";
         data += password;
 
+        Log.e("SAVE", "Saving auth: " + data);
+
         editor.putString(Globals.OAUTH_KEY, data);
+
+        editor.apply();
+
+    }
+
+    /**
+     * Deletes all stored information about this oauth token
+     * @param context The calling activity
+     */
+    public void delete(Context context){
+
+        SharedPreferences preferences = context.getSharedPreferences(Globals.PREFS_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.remove(Globals.OAUTH_KEY);
+        editor.apply();
 
     }
 
@@ -97,24 +121,34 @@ public class OAuthObject {
         SharedPreferences preferences = context.getSharedPreferences(Globals.PREFS_KEY, Context.MODE_PRIVATE);
         String existingAuth = preferences.getString(Globals.OAUTH_KEY, "");
 
+        Log.e("LOAD", "Loading existing auth: " + existingAuth);
+
         if(existingAuth.equals("")){
             valid = false;
         }
         else{
             String[] items = existingAuth.split(":");
-            String token = items[0];
-            int expire = Integer.parseInt(items[1]);
-            String user = items[2];
-            String pass = items[3];
-
-            if(expire > System.currentTimeMillis() / 1000){
+            if(items.length != 4){
                 valid = false;
-            }
-            else {
-                accessToken = token;
-                username = user;
-                password = pass;
-                valid = true;
+            } else{
+                String token = items[0];
+                long expire = Long.parseLong(items[1]);
+                String user = items[2];
+                String pass = items[3];
+
+                if(expire <= System.currentTimeMillis() / 1000){
+                    valid = false;
+                    username = user;
+                    password = pass;
+                }
+                else {
+                    accessToken = token;
+                    expirationTime = expire;
+                    username = user;
+                    password = pass;
+                    valid = true;
+                }
+
             }
 
         }
@@ -142,18 +176,22 @@ public class OAuthObject {
         // Parse the result
         try {
 
-            accessToken = result.getString(accessTokenField);
-            expirationTime = result.getInt(expirationField + (System.currentTimeMillis() / 1000));
+            Log.e("AUTHRES:", result.toString());
+
             if(!result.has("error")){
+                accessToken = result.getString(accessTokenField);
+                expirationTime = result.getInt(expirationField) + (System.currentTimeMillis() / 1000);
                 valid = true;
             }
             else {
+                lastError = result.getString("error");
                 valid = false;
             }
 
         } catch (Exception e){
 
             Log.e("AUTH ERROR", e.getMessage());
+            lastError = e.getMessage();
             accessToken = null;
             expirationTime = -1;
 
@@ -185,7 +223,15 @@ public class OAuthObject {
         return valid;
     }
 
-    public int getExpirationTime() {
+    public long getExpirationTime() {
         return expirationTime;
+    }
+
+    public String getLastError() {
+        return lastError;
+    }
+
+    public void setLastError(String lastError) {
+        this.lastError = lastError;
     }
 }

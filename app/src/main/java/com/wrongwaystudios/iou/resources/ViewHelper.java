@@ -1,6 +1,9 @@
 package com.wrongwaystudios.iou.resources;
 
+import android.content.Context;
+
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.wrongwaystudios.iou.R;
 
 /**
  * A class to help manipulate views and show dialogs
@@ -19,6 +22,22 @@ public class ViewHelper {
      * @param cancellable Whether or not this dialog should be dismissable
      */
     public static void showLoadingDialog(String title, String content, boolean cancellable){
+
+    }
+
+    /**
+     * Shows an error dialog after an error occurs
+     * @param context The calling activity
+     * @param title The title of the dialog
+     * @param content The content or error to show
+     */
+    public static void showErrorDialog(Context context, String title, String content){
+
+        new MaterialDialog.Builder(context)
+                .title(title)
+                .content(content)
+                .positiveText(R.string.error_ok)
+                .build().show();
 
     }
 

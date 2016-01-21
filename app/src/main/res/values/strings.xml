@@ -14,8 +14,13 @@
     <string name="login_signin">Sign In</string>
     <string name="login_signup">Sign Up</string>
     <string name="login_remember">Remember my login</string>
+    <string name="logout_menu">Sign out</string>
 
     <!-- Strings related to sign up -->
     <string name="signup_clear">Clear All</string>
+
+    <!-- Strings related to ViewHelper -->
+    <string name="error_ok">Ok</string>
+    <string name="error_title_login">Log In Error</string>
 
 </resources>

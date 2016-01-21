@@ -30,6 +30,7 @@ public class User {
     private final String successField = "success";
 
     private boolean inDB = false;
+    private String lastError = null;
 
     public User(String username){
         this.username = username;
@@ -64,11 +65,17 @@ public class User {
 
             inDB = result.getBoolean(successField);
 
+            if(result.has("error")){
+                lastError = result.getString("error");
+            }
+
             return result.getBoolean(successField);
 
         } catch (Exception e){
 
             Log.e("USER ERROR", e.getMessage());
+
+            lastError = e.getMessage();
 
             return false;
 
@@ -79,4 +86,13 @@ public class User {
     public boolean isInDB() {
         return inDB;
     }
+
+    public String getLastError() {
+        return lastError;
+    }
+
+    public void setLastError(String lastError) {
+        this.lastError = lastError;
+    }
+
 }

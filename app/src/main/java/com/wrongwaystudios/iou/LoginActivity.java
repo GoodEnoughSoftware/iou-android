@@ -15,6 +15,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import com.wrongwaystudios.iou.resources.Globals;
 import com.wrongwaystudios.iou.resources.OAuthObject;
 import com.wrongwaystudios.iou.resources.User;
+import com.wrongwaystudios.iou.resources.ViewHelper;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
@@ -77,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                new AddUserTask().execute(usernameEdit.getText().toString(), passwordEdit.getText().toString());
+                new AddUserAndLoginTask().execute(usernameEdit.getText().toString(), passwordEdit.getText().toString());
 
             }
         });
@@ -85,49 +86,31 @@ public class LoginActivity extends AppCompatActivity {
         animatedCircleLoadingView.setAnimationListener(new AnimatedCircleLoadingView.AnimationListener() {
             @Override
             public void onAnimationEnd() {
-                Intent intent = new Intent(signInContext, MainActivity.class);
-                startActivity(intent);
-                ((Activity) signInContext).finish();
+                if(Globals.authObject.isValid()){
+                    Intent intent = new Intent(signInContext, MainActivity.class);
+                    startActivity(intent);
+                    ((Activity) signInContext).finish();
+                }
+                else {
+                    animatedCircleLoadingView.resetLoading();
+                    animatedCircleLoadingView.setVisibility(View.GONE);
+                    signUpBtn.setVisibility(View.VISIBLE);
+                    signInBtn.setVisibility(View.VISIBLE);
+                    if(Globals.authObject != null && Globals.authObject.getLastError() != null){
+                        ViewHelper.showErrorDialog(signInContext, getString(R.string.error_title_login), Globals.authObject.getLastError());
+                        Globals.authObject.setLastError(null);
+                    }
+                    else if(Globals.mainUser != null && Globals.mainUser.getLastError() != null){
+                        ViewHelper.showErrorDialog(signInContext, getString(R.string.error_title_login), Globals.mainUser.getLastError());
+                        Globals.mainUser.setLastError(null);
+                    }
+
+                }
+
             }
         });
 
     }
-
-    /**
-     * Asynchronous task for completing the OAUTH authentication
-     */
-    /*private class LoginTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            try {
-                Thread.sleep(5L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            return "Registration attempted";
-
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            animatedCircleLoadingView.stopOk();
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            animatedCircleLoadingView.startIndeterminate();
-            signUpBtn.setVisibility(View.GONE);
-            signInBtn.setVisibility(View.GONE);
-
-        }
-
-    }*/
 
     /**
      * Downloads an access token from the server for making transactions
@@ -142,11 +125,13 @@ public class LoginActivity extends AppCompatActivity {
 
             Log.e("LOGIN", "Got username and password");
 
-            Globals.authObject.authorize();
+            Globals.authObject.authorize(true);
 
             Log.e("LOGIN", "Attempting to authorize");
 
-            Globals.authObject.saveOAuthToPrefs(signInContext);
+            if(Globals.authObject.isValid()){
+                Globals.authObject.saveOAuthToPrefs(signInContext);
+            }
 
             return "Success";
 
@@ -167,6 +152,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
 
+            animatedCircleLoadingView.setVisibility(View.VISIBLE);
             animatedCircleLoadingView.startIndeterminate();
             signUpBtn.setVisibility(View.GONE);
             signInBtn.setVisibility(View.GONE);
@@ -178,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Adds a user account to the server
      */
-    private class AddUserTask extends AsyncTask<String, Void, String> {
+    private class AddUserAndLoginTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {
@@ -191,6 +177,19 @@ public class LoginActivity extends AppCompatActivity {
 
             Log.e("LOGIN", "Attempt to add user: " + added);
 
+            if(added){
+                Globals.authObject.setUsername(params[0]);
+                Globals.authObject.setPassword(params[1]);
+
+                Log.e("LOGIN", "Got username and password");
+
+                Globals.authObject.authorize(true);
+
+                Log.e("LOGIN", "Attempting to authorize");
+
+                Globals.authObject.saveOAuthToPrefs(signInContext);
+            }
+
             return "Success";
 
         }
@@ -198,7 +197,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
 
-            if(Globals.mainUser.isInDB()){
+            if(Globals.mainUser.isInDB() && Globals.authObject.isValid()){
                 animatedCircleLoadingView.stopOk();
             }
             else {
@@ -210,6 +209,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
 
+            animatedCircleLoadingView.setVisibility(View.VISIBLE);
             animatedCircleLoadingView.startIndeterminate();
             signUpBtn.setVisibility(View.GONE);
             signInBtn.setVisibility(View.GONE);

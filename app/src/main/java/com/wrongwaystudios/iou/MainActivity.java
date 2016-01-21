@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,12 +18,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.wrongwaystudios.iou.resources.Globals;
 import com.wrongwaystudios.iou.resources.OAuthObject;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private OAuthObject oAuthObject = null;
     private Context thisActivity = this;
 
     @Override
@@ -57,15 +58,21 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
 
         // Run this on the main thread so this activity doesn't show
-        oAuthObject = new OAuthObject(this);
-        oAuthObject.authorize();
-        if(!oAuthObject.isValid()){
-            Intent intent = new Intent(thisActivity, LoginActivity.class);
-            startActivity(intent);
-            ((Activity) thisActivity).finish();
+        if(Globals.authObject != null && Globals.authObject.isValid()){
+            // Do nothing
+            Log.e("MAIN", "Auth is valid!");
         }
+        else {
 
-        //new AuthorizeTask().execute();
+            Globals.authObject = new OAuthObject(this);
+            Globals.authObject.authorize(false);
+            if(!Globals.authObject.isValid()){
+                Intent intent = new Intent(thisActivity, LoginActivity.class);
+                startActivity(intent);
+                ((Activity) thisActivity).finish();
+            }
+
+        }
 
     }
 
@@ -93,8 +100,16 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        //noinspection SimplfiableIfStatement
+        if (id == R.id.action_signout) {
+            if(Globals.authObject != null){
+                Globals.authObject.delete(this);
+            }
+            Globals.authObject = null;
+            Globals.mainUser = null;
+            Intent intent = new Intent(thisActivity, LoginActivity.class);
+            startActivity(intent);
+            ((Activity) thisActivity).finish();
             return true;
         }
 
@@ -124,40 +139,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    /**
-     * Downloads a client token from the server for making transactions
-     */
-    private class AuthorizeTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            oAuthObject.authorize();
-
-            return "Success";
-
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            if(!oAuthObject.isValid()){
-                Intent intent = new Intent(thisActivity, LoginActivity.class);
-                startActivity(intent);
-                ((Activity) thisActivity).finish();
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-
-
-        }
-
     }
 
 }

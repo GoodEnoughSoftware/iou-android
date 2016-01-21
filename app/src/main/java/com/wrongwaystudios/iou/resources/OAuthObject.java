@@ -178,6 +178,12 @@ public class OAuthObject {
 
             Log.e("AUTHRES:", result.toString());
 
+            if(result.toString().equals("{}")){
+                lastError = "Username or password is incorrect";
+                valid = false;
+                return;
+            }
+
             if(!result.has("error")){
                 accessToken = result.getString(accessTokenField);
                 expirationTime = result.getInt(expirationField) + (System.currentTimeMillis() / 1000);

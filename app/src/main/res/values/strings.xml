@@ -23,4 +23,7 @@
     <string name="error_ok">Ok</string>
     <string name="error_title_login">Log In Error</string>
 
+    <!-- Strings related to the main page -->
+    <string name="main_page_title">Your IOU\'s</string>
+
 </resources>

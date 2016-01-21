@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.wrongwaystudios.iou.resources.Globals;
 import com.wrongwaystudios.iou.resources.OAuthObject;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -59,8 +61,9 @@ public class MainActivity extends AppCompatActivity
 
         // Run this on the main thread so this activity doesn't show
         if(Globals.authObject != null && Globals.authObject.isValid()){
-            // Do nothing
             Log.e("MAIN", "Auth is valid!");
+            TextView usernameLabel = (TextView) findViewById(R.id.username_label);
+            usernameLabel.setText(Globals.authObject.getUsername());
         }
         else {
 

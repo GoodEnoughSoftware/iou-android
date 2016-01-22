@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.view.menu.MenuItemImpl;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -25,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wrongwaystudios.iou.resources.Globals;
+import com.wrongwaystudios.iou.resources.NotificationAdapter;
 import com.wrongwaystudios.iou.resources.OAuthObject;
 import com.wrongwaystudios.iou.resources.User;
 import com.wrongwaystudios.iou.resources.UserNotification;
@@ -218,7 +221,13 @@ public class MainActivity extends AppCompatActivity
      */
     public void addNotifications(){
 
-        LinearLayout navigationViewRight = (LinearLayout) findViewById(R.id.linear_view_right);
+        RecyclerView navigationViewRight = (RecyclerView) findViewById(R.id.recycler_view_right);
+        navigationViewRight.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        navigationViewRight.setLayoutManager(layoutManager);
+
+        NotificationAdapter adapter = new NotificationAdapter(Globals.mainUser.notifications);
+        navigationViewRight.setAdapter(adapter);
 
         for(UserNotification notif : Globals.mainUser.notifications){
 

@@ -27,6 +27,7 @@ dependencies {
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'com.github.medyo:fancybuttons:1.5@aar'
     compile 'com.github.jlmd:AnimatedCircleLoadingView:1.1.4@aar'
+    compile 'com.mikhaellopez:circularfillableloaders:1.0.0'
     compile('com.github.afollestad.material-dialogs:core:0.8.5.3@aar') {
         transitive = true
     }

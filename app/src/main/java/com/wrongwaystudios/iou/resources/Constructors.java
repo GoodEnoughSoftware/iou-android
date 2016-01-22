@@ -2,6 +2,7 @@ package com.wrongwaystudios.iou.resources;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -62,7 +63,7 @@ public class Constructors {
             wr.flush();
             wr.close();
 
-            Log.e("SERVER:" , "" + conn.getResponseCode());
+            //Log.e("SERVER:" , "" + conn.getResponseCode());
 
             // Read the response
             BufferedReader in = new BufferedReader(
@@ -78,7 +79,7 @@ public class Constructors {
             return new JSONObject(response.toString());
         }
         catch (Exception e) {
-            Log.e("******", "" + e.getMessage());
+            //Log.e("******", "" + e.getMessage());
             return new JSONObject();
         } finally {
             if(conn != null){
@@ -166,6 +167,10 @@ public class Constructors {
             conn = (HttpURLConnection) finalUrl.openConnection();
             conn.setRequestMethod("GET");
 
+            if(authorization != null){
+                conn.setRequestProperty("Authorization", "Bearer " + authorization);
+            }
+
             // Read the response
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(conn.getInputStream()));
@@ -180,8 +185,63 @@ public class Constructors {
             return new JSONObject(response.toString());
         }
         catch (Exception e) {
-            Log.e("******", e.getMessage());
+            //Log.e("******", e.getMessage());
             return new JSONObject();
+        } finally {
+            if(conn != null){
+                conn.disconnect();
+            }
+        }
+
+    }
+
+    /**
+     * Creates and executes an HTTP GET request using
+     * the HttpURLConnection class.
+     * @param url The url to the API endpoint you are hitting
+     * @param authorization The response from the server as a JSON Object
+     * @return
+     */
+    public static JSONArray getDataAsArray(final String url, String authorization){
+
+        HttpURLConnection conn = null;
+
+        // Construct the GET
+        try {
+
+            // Construct the GET
+            URL finalUrl = new URL(url);
+            conn = (HttpURLConnection) finalUrl.openConnection();
+            conn.setDoInput(true);
+            conn.setInstanceFollowRedirects(false);
+            conn.setUseCaches(false);
+            conn.setRequestMethod("GET");
+
+            if(authorization != null){
+                conn.setRequestProperty("Authorization", "Bearer " + authorization);
+            }
+
+            // Read the response
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                //Log.e("SERVED", inputLine);
+                response.append(inputLine);
+            }
+            in.close();
+
+            //Log.e("CONSTR:", response.toString());
+
+            // Return the result
+            return new JSONArray(response.toString());
+        }
+        catch (Exception e) {
+
+            Log.e("ERROR", e.toString());
+
+            return new JSONArray();
         } finally {
             if(conn != null){
                 conn.disconnect();

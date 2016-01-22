@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/notifications_title">
+        <menu android:id="@+id/notifications_menu">
+
+            <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Import"/>
+            <item
+                android:id="@+id/nav_gallery"
+                android:icon="@drawable/ic_menu_gallery"
+                android:title="Gallery"/>
+            <item
+                android:id="@+id/nav_slideshow"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="Slideshow"/>
+            <item
+                android:id="@+id/nav_manage"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Tools"/>
+            <item
+                android:id="@+id/nav_cameras"
+                android:icon="@drawable/ic_menu_camera"
+                android:title="Import"/>
+            <item
+                android:id="@+id/nav_gallerys"
+                android:icon="@drawable/ic_menu_gallery"
+                android:title="Gallery"/>
+            <item
+                android:id="@+id/nav_slideshows"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="Slideshow"/>
+            <item
+                android:id="@+id/nav_manages"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Tools"/>
+            <item
+                android:id="@+id/nav_camerad"
+                android:icon="@drawable/ic_menu_camera"
+                android:title="Import"/>
+            <item
+                android:id="@+id/nav_galleryd"
+                android:icon="@drawable/ic_menu_gallery"
+                android:title="Gallery"/>
+            <item
+                android:id="@+id/nav_slideshowd"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="Slideshow"/>
+            <item
+                android:id="@+id/nav_managed"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Tools"/>
+            <item
+                android:id="@+id/nav_camerag"
+                android:icon="@drawable/ic_menu_camera"
+                android:title="Import"/>
+            <item
+                android:id="@+id/nav_galleryg"
+                android:icon="@drawable/ic_menu_gallery"
+                android:title="Gallery"/>
+            <item
+                android:id="@+id/nav_slideshowg"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="Slideshow"/>
+            <item
+                android:id="@+id/nav_manageg"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Tools"/>
+
+        </menu>
+
+    </item>
+
+</menu>

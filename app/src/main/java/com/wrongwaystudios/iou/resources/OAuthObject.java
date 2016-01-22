@@ -60,7 +60,7 @@ public class OAuthObject {
             loadOAuthFromPrefs(this.appContext);
         }
 
-        Log.e("AUTHOR", "Auth is valid: " + valid);
+        //Log.e("AUTHOR", "Auth is valid: " + valid);
 
         // If not yet valid, download the access token
         if(!valid) {
@@ -89,7 +89,7 @@ public class OAuthObject {
         data += username + ":";
         data += password;
 
-        Log.e("SAVE", "Saving auth: " + data);
+        //Log.e("SAVE", "Saving auth: " + data);
 
         editor.putString(Globals.OAUTH_KEY, data);
 
@@ -121,7 +121,7 @@ public class OAuthObject {
         SharedPreferences preferences = context.getSharedPreferences(Globals.PREFS_KEY, Context.MODE_PRIVATE);
         String existingAuth = preferences.getString(Globals.OAUTH_KEY, "");
 
-        Log.e("LOAD", "Loading existing auth: " + existingAuth);
+        //Log.e("LOAD", "Loading existing auth: " + existingAuth);
 
         if(existingAuth.equals("")){
             valid = false;
@@ -176,7 +176,7 @@ public class OAuthObject {
         // Parse the result
         try {
 
-            Log.e("AUTHRES:", result.toString());
+            //Log.e("AUTHRES:", result.toString());
 
             if(result.toString().equals("{}")){
                 lastError = "Username or password is incorrect";
@@ -196,7 +196,7 @@ public class OAuthObject {
 
         } catch (Exception e){
 
-            Log.e("AUTH ERROR", e.getMessage());
+            //Log.e("AUTH ERROR", e.getMessage());
             lastError = e.getMessage();
             accessToken = null;
             expirationTime = -1;

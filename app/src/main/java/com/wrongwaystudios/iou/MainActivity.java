@@ -7,7 +7,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.view.menu.MenuItemImpl;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,15 +19,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wrongwaystudios.iou.resources.Globals;
 import com.wrongwaystudios.iou.resources.OAuthObject;
+import com.wrongwaystudios.iou.resources.User;
+import com.wrongwaystudios.iou.resources.UserNotification;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Context thisActivity = this;
+    private DrawerLayout drawer = null;
+
+    private TextView usernameLabel = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -44,14 +54,16 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        NavigationView navigationViewLeft = (NavigationView) findViewById(R.id.nav_view_left);
+        View header = navigationViewLeft.getHeaderView(0);
+        usernameLabel = (TextView) header.findViewById(R.id.username_label);
+        navigationViewLeft.setNavigationItemSelectedListener(this);
 
     }
 
@@ -61,9 +73,17 @@ public class MainActivity extends AppCompatActivity
 
         // Run this on the main thread so this activity doesn't show
         if(Globals.authObject != null && Globals.authObject.isValid()){
-            Log.e("MAIN", "Auth is valid!");
-            TextView usernameLabel = (TextView) findViewById(R.id.username_label);
+            //Log.e("MAIN", "Auth is valid!");
+
+            // Create a user object
+            Globals.mainUser = new User(Globals.authObject.getUsername());
             usernameLabel.setText(Globals.authObject.getUsername());
+
+            // Get their notifications (asynchronously)
+            new GetNotificationsTask().execute();
+
+            //TextView usernameLabel = (TextView) findViewById(R.id.username_label);
+            //usernameLabel.setText(Globals.authObject.getUsername());
         }
         else {
 
@@ -73,6 +93,13 @@ public class MainActivity extends AppCompatActivity
                 Intent intent = new Intent(thisActivity, LoginActivity.class);
                 startActivity(intent);
                 ((Activity) thisActivity).finish();
+            } else {
+                // Create a user object
+                Globals.mainUser = new User(Globals.authObject.getUsername());
+                usernameLabel.setText(Globals.authObject.getUsername());
+
+                // Get their notifications (asynchronously)
+                new GetNotificationsTask().execute();
             }
 
         }
@@ -84,7 +111,12 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else if (drawer.isDrawerOpen(GravityCompat.END)){
+            drawer.closeDrawer(GravityCompat.END);
+        }
+
+        else {
             super.onBackPressed();
         }
     }
@@ -115,6 +147,9 @@ public class MainActivity extends AppCompatActivity
             ((Activity) thisActivity).finish();
             return true;
         }
+        else if (id == R.id.action_notifications) {
+            drawer.openDrawer(Gravity.RIGHT);
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -142,6 +177,59 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * Downloads notifications from the server
+     */
+    private class GetNotificationsTask extends AsyncTask<String, Void, String> {
+
+        boolean notifGet = false;
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            notifGet = Globals.mainUser.getNotifications();
+
+            return "Success";
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            if(notifGet){
+                addNotifications();
+            }
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+
+
+        }
+
+    }
+
+    /**
+     * Load notifications in the notification pane
+     */
+    public void addNotifications(){
+
+        LinearLayout navigationViewRight = (LinearLayout) findViewById(R.id.linear_view_right);
+
+        for(UserNotification notif : Globals.mainUser.notifications){
+
+            View child = getLayoutInflater().inflate(R.layout.notification_view, null);
+            ((TextView) child.findViewById(R.id.notification_label)).setText(notif.getMessage());
+            child.findViewById(R.id.notification_ind).setVisibility(View.VISIBLE);
+
+            navigationViewRight.addView(child);
+
+        }
+
     }
 
 }

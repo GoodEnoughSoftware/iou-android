@@ -3,6 +3,7 @@ package com.wrongwaystudios.iou.resources;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -22,12 +23,15 @@ public class User {
     private Bitmap profilePic;
 
     private final String BASE_USER_URL = "api/users";
+    private final String BASE_NOTI_URL = "api/notifications/";
 
     private final String clientIdField = "client_id";
     private final String clientSecretField = "client_secret";
     private final String usernameField = "username";
     private final String passwordField = "password";
     private final String successField = "success";
+
+    public UserNotification[] notifications;
 
     private boolean inDB = false;
     private String lastError = null;
@@ -61,7 +65,7 @@ public class User {
         // Parse the result
         try {
 
-            Log.e("ADDUSER", result.toString());
+            //Log.e("ADDUSER", result.toString());
 
             inDB = result.getBoolean(successField);
 
@@ -73,9 +77,34 @@ public class User {
 
         } catch (Exception e){
 
-            Log.e("USER ERROR", e.getMessage());
+            //Log.e("USER ERROR", e.getMessage());
 
             lastError = e.getMessage();
+
+            return false;
+
+        }
+
+    }
+
+    public boolean getNotifications(){
+
+        JSONArray result = Constructors.getDataAsArray(Globals.BASE_API_URL + BASE_NOTI_URL, Globals.authObject.getAccessToken());
+
+        try {
+
+            notifications = new UserNotification[result.length()];
+            for(int i = 0; i < notifications.length; i++){
+                JSONObject notif = result.getJSONObject(i);
+                String id = notif.getString("id");
+                String message = notif.getString("message");
+                notifications[i] = new UserNotification(id, message);
+            }
+
+            return true;
+
+
+        } catch (Exception e) {
 
             return false;
 
@@ -94,5 +123,7 @@ public class User {
     public void setLastError(String lastError) {
         this.lastError = lastError;
     }
+
+
 
 }

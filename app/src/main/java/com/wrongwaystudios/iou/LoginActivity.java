@@ -123,11 +123,11 @@ public class LoginActivity extends AppCompatActivity {
             Globals.authObject.setUsername(params[0]);
             Globals.authObject.setPassword(params[1]);
 
-            Log.e("LOGIN", "Got username and password");
+            //Log.e("LOGIN", "Got username and password");
 
             Globals.authObject.authorize(true);
 
-            Log.e("LOGIN", "Attempting to authorize");
+            //Log.e("LOGIN", "Attempting to authorize");
 
             if(Globals.authObject.isValid()){
                 Globals.authObject.saveOAuthToPrefs(signInContext);
@@ -171,21 +171,21 @@ public class LoginActivity extends AppCompatActivity {
 
             Globals.mainUser = new User();
 
-            Log.e("ADDUSER", "Got username and password");
+            //Log.e("ADDUSER", "Got username and password");
 
             boolean added = Globals.mainUser.addUser(params[0], params[1]);
 
-            Log.e("LOGIN", "Attempt to add user: " + added);
+            //Log.e("LOGIN", "Attempt to add user: " + added);
 
             if(added){
                 Globals.authObject.setUsername(params[0]);
                 Globals.authObject.setPassword(params[1]);
 
-                Log.e("LOGIN", "Got username and password");
+                //Log.e("LOGIN", "Got username and password");
 
                 Globals.authObject.authorize(true);
 
-                Log.e("LOGIN", "Attempting to authorize");
+                //Log.e("LOGIN", "Attempting to authorize");
 
                 Globals.authObject.saveOAuthToPrefs(signInContext);
             }

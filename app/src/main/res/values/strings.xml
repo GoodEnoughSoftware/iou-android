@@ -27,4 +27,14 @@
     <string name="main_page_title">Your IOU\'s</string>
     <string name="notifications_title">Notifications</string>
 
+    <!-- String related to the main navigation view -->
+    <string name="nav_my_ious">My IOU\'s</string>
+    <string name="nav_pending_ious">Pending IOU\'s</string>
+    <string name="nav_previous_ious">Previous IOU\'s</string>
+    <string name="nav_friends">Friends List</string>
+    <string name="nav_create_new">Create New IOU</string>
+    <string name="nav_settings_title">Settings</string>
+    <string name="nav_edit_profile">Edit Profile</string>
+    <string name="nav_sign_out">Sign Out</string>
+
 </resources>

@@ -140,14 +140,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplfiableIfStatement
         if (id == R.id.action_signout) {
-            if(Globals.authObject != null){
-                Globals.authObject.delete(this);
-            }
-            Globals.authObject = null;
-            Globals.mainUser = null;
-            Intent intent = new Intent(thisActivity, LoginActivity.class);
-            startActivity(intent);
-            ((Activity) thisActivity).finish();
+            signOut();
             return true;
         }
         else if (id == R.id.action_notifications) {
@@ -163,18 +156,20 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_ious) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_pending) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_previous) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_friends) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_create) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_edit_prof) {
 
+        } else if (id == R.id.nav_sign_out) {
+            signOut();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -239,6 +234,20 @@ public class MainActivity extends AppCompatActivity
 
         }
 
+    }
+
+    /**
+     * Performs actions required to log out the user
+     */
+    public void signOut(){
+        if(Globals.authObject != null){
+            Globals.authObject.delete(this);
+        }
+        Globals.authObject = null;
+        Globals.mainUser = null;
+        Intent intent = new Intent(thisActivity, LoginActivity.class);
+        startActivity(intent);
+        ((Activity) thisActivity).finish();
     }
 
 }

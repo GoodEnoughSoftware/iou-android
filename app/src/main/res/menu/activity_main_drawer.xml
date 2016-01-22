@@ -3,33 +3,37 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_ious"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import"/>
+            android:title="@string/nav_my_ious"/>
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_pending"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery"/>
+            android:title="@string/nav_pending_ious"/>
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_previous"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow"/>
+            android:title="@string/nav_previous_ious"/>
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_friends"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools"/>
+            android:title="@string/nav_friends"/>
+        <item
+            android:id="@+id/nav_create"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/nav_create_new"/>
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/nav_settings_title">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_edit_prof"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share"/>
+                android:title="@string/nav_edit_profile"/>
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_sign_out"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send"/>
+                android:title="@string/nav_sign_out"/>
         </menu>
     </item>
 

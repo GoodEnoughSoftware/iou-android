@@ -7,6 +7,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="notif_header_height">100dp</dimen>
+    <dimen name="notif_header_height">81dp</dimen>
 
 </resources>

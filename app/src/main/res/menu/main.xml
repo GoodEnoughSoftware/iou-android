@@ -7,9 +7,4 @@
         android:icon="@drawable/ic_notifications_white"
         android:title="@string/notifications_title"
         app:showAsAction="ifRoom"/>
-    <item
-        android:id="@+id/action_signout"
-        android:orderInCategory="100"
-        android:title="@string/logout_menu"
-        app:showAsAction="never"/>
 </menu>

@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.view.menu.MenuItemImpl;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,8 +43,9 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawer = null;
 
     private RecyclerView navigationViewRight;
-    NotificationAdapter notificationAdapter;
-    RecyclerView.LayoutManager layoutManager;
+    private NotificationAdapter notificationAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private TextView usernameLabel = null;
 
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity
         navigationViewLeft.setNavigationItemSelectedListener(this);
 
         navigationViewRight = (RecyclerView) findViewById(R.id.recycler_view_right);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         navigationViewRight.setLayoutManager(layoutManager);
         // Initially null
@@ -94,12 +97,20 @@ public class MainActivity extends AppCompatActivity
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 //Remove swiped item from list and notify the RecyclerView
                 int del = viewHolder.getAdapterPosition();
+                new DeleteNotificationsTask().execute(del);
                 //navigationViewRight.removeViewAt(del);
                 Globals.mainUser.notifications.remove(del);
                 notificationAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                 //notificationAdapter.notifyDataSetChanged();
             }
         };
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new GetNotificationsTask().execute();
+            }
+        });
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(navigationViewRight);
@@ -175,11 +186,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplfiableIfStatement
-        if (id == R.id.action_signout) {
-            signOut();
-            return true;
-        }
-        else if (id == R.id.action_notifications) {
+        if (id == R.id.action_notifications) {
             drawer.openDrawer(Gravity.RIGHT);
         }
 
@@ -234,6 +241,42 @@ public class MainActivity extends AppCompatActivity
 
             if(notifGet){
                 addNotifications();
+                if(swipeRefreshLayout.isRefreshing()){
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            }
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+
+
+        }
+
+    }
+
+    private class DeleteNotificationsTask extends AsyncTask<Integer, Void, String> {
+
+        boolean notifDelete = false;
+
+        @Override
+        protected String doInBackground(Integer ... params) {
+
+            notifDelete = Globals.mainUser.deleteNotification(params[0]);
+
+            return "Success";
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            if(notifDelete){
+                Log.e("NOTIF", "Notification was deleted");
+            } else {
+                Log.e("NOTIF", "Notification was not deleted");
             }
 
         }

@@ -35,6 +35,7 @@
     <string name="nav_create_new">Create New IOU</string>
     <string name="nav_settings_title">Settings</string>
     <string name="nav_edit_profile">Edit Profile</string>
+    <string name="nav_send_invite">Send Invite</string>
     <string name="nav_sign_out">Sign Out</string>
 
 </resources>

@@ -31,14 +31,21 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/notif_header_main">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_right"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_marginTop="@dimen/notif_header_height"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:fitsSystemWindows="true"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_right"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:fitsSystemWindows="true"/>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </android.support.design.widget.NavigationView>
 

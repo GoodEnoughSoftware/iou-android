@@ -47,7 +47,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.notification_view, parent, false);
         // set the view's size, margins, paddings and layout parameters
-        Log.e("USER", "On Created view holder: " + v);
+        //Log.e("USER", "On Created view holder: " + v);
         return new ViewHolder(v);
     }
 

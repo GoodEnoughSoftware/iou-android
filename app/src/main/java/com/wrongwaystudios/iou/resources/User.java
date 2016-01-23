@@ -113,6 +113,28 @@ public class User {
 
     }
 
+    /**
+     * Delete notification at the given position
+     * @param pos Notification number to remove
+     * @return whether or not this was removed
+     */
+    public boolean deleteNotification(int pos){
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id", Globals.mainUser.notifications.get(pos).getId());
+
+        JSONObject result = Constructors.deleteData(Globals.BASE_API_URL + BASE_NOTI_URL, params, Globals.authObject.getAccessToken());
+
+        try {
+            boolean success = result.getBoolean("success");
+            Log.e("Delete Notif: ", "" + success);
+            return success;
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
     public boolean isInDB() {
         return inDB;
     }
@@ -123,14 +145,6 @@ public class User {
 
     public void setLastError(String lastError) {
         this.lastError = lastError;
-    }
-
-    /**
-     * Deletes the notification at the desired location
-     * @param pos the position of the notification to remove
-     */
-    public void deleteNotification(int pos){
-
     }
 
 }

@@ -1,12 +1,15 @@
 package com.wrongwaystudios.iou.resources;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wrongwaystudios.iou.R;
+
+import java.util.ArrayList;
 
 /**
  * Adapter that handles the display of notifications
@@ -16,7 +19,7 @@ import com.wrongwaystudios.iou.R;
  */
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder>{
 
-    private UserNotification[] mDataset;
+    private ArrayList<UserNotification> mDataset;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -31,7 +34,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public NotificationAdapter(UserNotification[] myDataset) {
+    public NotificationAdapter(ArrayList<UserNotification> myDataset) {
         mDataset = myDataset;
     }
 
@@ -39,12 +42,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public NotificationAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
+
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.notification_view, parent, false);
         // set the view's size, margins, paddings and layout parameters
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        Log.e("USER", "On Created view holder: " + v);
+        return new ViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -52,7 +56,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        ((TextView) holder.notifView.findViewById(R.id.notification_label)).setText(mDataset[position].getMessage());
+        ((TextView) holder.notifView.findViewById(R.id.notification_label)).setText(mDataset.get(position).getMessage());
         holder.notifView.findViewById(R.id.notification_ind).setVisibility(View.VISIBLE);
 
     }
@@ -60,7 +64,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return mDataset.size();
     }
 
 }

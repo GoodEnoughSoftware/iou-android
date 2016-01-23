@@ -6,6 +6,7 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -31,7 +32,7 @@ public class User {
     private final String passwordField = "password";
     private final String successField = "success";
 
-    public UserNotification[] notifications;
+    public ArrayList<UserNotification> notifications;
 
     private boolean inDB = false;
     private String lastError = null;
@@ -93,12 +94,12 @@ public class User {
 
         try {
 
-            notifications = new UserNotification[result.length()];
-            for(int i = 0; i < notifications.length; i++){
+            notifications = new ArrayList<>();
+            for(int i = 0; i < result.length(); i++){
                 JSONObject notif = result.getJSONObject(i);
                 String id = notif.getString("id");
                 String message = notif.getString("message");
-                notifications[i] = new UserNotification(id, message);
+                notifications.add(new UserNotification(id, message));
             }
 
             return true;
@@ -124,6 +125,12 @@ public class User {
         this.lastError = lastError;
     }
 
+    /**
+     * Deletes the notification at the desired location
+     * @param pos the position of the notification to remove
+     */
+    public void deleteNotification(int pos){
 
+    }
 
 }

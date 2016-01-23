@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.view.menu.MenuItemImpl;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -32,11 +33,17 @@ import com.wrongwaystudios.iou.resources.OAuthObject;
 import com.wrongwaystudios.iou.resources.User;
 import com.wrongwaystudios.iou.resources.UserNotification;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Context thisActivity = this;
     private DrawerLayout drawer = null;
+
+    private RecyclerView navigationViewRight;
+    NotificationAdapter notificationAdapter;
+    RecyclerView.LayoutManager layoutManager;
 
     private TextView usernameLabel = null;
 
@@ -67,6 +74,35 @@ public class MainActivity extends AppCompatActivity
         View header = navigationViewLeft.getHeaderView(0);
         usernameLabel = (TextView) header.findViewById(R.id.username_label);
         navigationViewLeft.setNavigationItemSelectedListener(this);
+
+        navigationViewRight = (RecyclerView) findViewById(R.id.recycler_view_right);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        navigationViewRight.setLayoutManager(layoutManager);
+        // Initially null
+        ArrayList<UserNotification> emptyNotifs = new ArrayList<>();
+        notificationAdapter = new NotificationAdapter(emptyNotifs);
+        navigationViewRight.setAdapter(notificationAdapter);
+        notificationAdapter.notifyDataSetChanged();
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                //Remove swiped item from list and notify the RecyclerView
+                int del = viewHolder.getAdapterPosition();
+                //navigationViewRight.removeViewAt(del);
+                Globals.mainUser.notifications.remove(del);
+                notificationAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                //notificationAdapter.notifyDataSetChanged();
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(navigationViewRight);
 
     }
 
@@ -216,23 +252,8 @@ public class MainActivity extends AppCompatActivity
      */
     public void addNotifications(){
 
-        RecyclerView navigationViewRight = (RecyclerView) findViewById(R.id.recycler_view_right);
-        navigationViewRight.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        navigationViewRight.setLayoutManager(layoutManager);
-
-        NotificationAdapter adapter = new NotificationAdapter(Globals.mainUser.notifications);
-        navigationViewRight.setAdapter(adapter);
-
-        for(UserNotification notif : Globals.mainUser.notifications){
-
-            View child = getLayoutInflater().inflate(R.layout.notification_view, null);
-            ((TextView) child.findViewById(R.id.notification_label)).setText(notif.getMessage());
-            child.findViewById(R.id.notification_ind).setVisibility(View.VISIBLE);
-
-            navigationViewRight.addView(child);
-
-        }
+        notificationAdapter = new NotificationAdapter(Globals.mainUser.notifications);
+        navigationViewRight.setAdapter(notificationAdapter);
 
     }
 

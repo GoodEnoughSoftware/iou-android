@@ -10,6 +10,7 @@ public class UserNotification {
 
     private String id;
     private String message;
+    private boolean seen = false;
 
     /**
      * Creates a notification with an id and message
@@ -47,5 +48,13 @@ public class UserNotification {
 
     public String getMessage() {
         return message;
+    }
+
+    public boolean isSeen() {
+        return seen;
+    }
+
+    public void setSeen(boolean seen) {
+        this.seen = seen;
     }
 }

@@ -14,7 +14,7 @@ public class Globals {
     public static final String CLIENT_ID = "app";
     public static final String CLIENT_SECRET = "d0gd4ys";
 
-    public static final String BASE_API_URL = "http://ericwadkins.com/";
+    public static final String BASE_API_URL = "http://18.111.56.89/";
 
     public static OAuthObject authObject = null;
     public static User mainUser = null;

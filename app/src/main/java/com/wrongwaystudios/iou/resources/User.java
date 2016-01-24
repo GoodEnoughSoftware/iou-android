@@ -25,6 +25,7 @@ public class User {
 
     private final String BASE_USER_URL = "api/users";
     private final String BASE_NOTI_URL = "api/notifications/";
+    private final String BASE_IOUS_ACT_URL = "api/ious/active/";
 
     private final String clientIdField = "client_id";
     private final String clientSecretField = "client_secret";
@@ -33,6 +34,7 @@ public class User {
     private final String successField = "success";
 
     public ArrayList<UserNotification> notifications;
+    public ArrayList<Transaction> activeIous;
 
     private boolean inDB = false;
     private String lastError = null;
@@ -88,6 +90,37 @@ public class User {
 
     }
 
+    /**
+     * Gets a list of active IOUs from the server
+     * @return
+     */
+    public boolean getActiveTransactions(){
+
+        JSONArray result = Constructors.getDataAsArray(Globals.BASE_API_URL + BASE_IOUS_ACT_URL, Globals.authObject.getAccessToken());
+
+        try {
+
+            activeIous = new ArrayList<>();
+            for(int i = 0; i < result.length(); i++){
+                JSONObject iou = result.getJSONObject(i);
+                //String id = notif.getString("id");
+                //iou.add(new Transaction());
+            }
+
+            return true;
+
+        } catch (Exception e) {
+
+            return false;
+
+        }
+
+    }
+
+    /**
+     * Gets a list of notifications from the server
+     * @return whether or not the notification get was successful
+     */
     public boolean getNotifications(){
 
         JSONArray result = Constructors.getDataAsArray(Globals.BASE_API_URL + BASE_NOTI_URL, Globals.authObject.getAccessToken());

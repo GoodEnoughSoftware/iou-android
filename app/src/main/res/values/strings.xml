@@ -27,7 +27,7 @@
     <string name="main_page_title">Your IOU\'s</string>
     <string name="notifications_title">Notifications</string>
 
-    <!-- String related to the main navigation view -->
+    <!-- Strings related to the main navigation view -->
     <string name="nav_my_ious">My IOU\'s</string>
     <string name="nav_pending_ious">Pending IOU\'s</string>
     <string name="nav_previous_ious">Previous IOU\'s</string>
@@ -37,5 +37,14 @@
     <string name="nav_edit_profile">Edit Profile</string>
     <string name="nav_send_invite">Send Invite</string>
     <string name="nav_sign_out">Sign Out</string>
+
+    <!-- Strings related to the IOU creation activity -->
+    <string name="title_activity_create_iou">Create IOU</string>
+    <string name="iou_create_amount_hint">Amount</string>
+    <string name="iou_create_recipient_hint">Recipient</string>
+    <string name="iou_create_sender_hint">Sender</string>
+    <string name="iou_create_note_hint">Attach note: </string>
+    <string name="iou_create_date_hint">Due date: </string>
+    <string name="iou_create_send_notif_check">Send Notification</string>
 
 </resources>

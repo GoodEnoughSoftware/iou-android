@@ -26,9 +26,19 @@
         </activity>
         <activity android:name=".LoginActivity">
         </activity>
-        <activity android:name=".SignUpActivity"
-                  android:label="@string/login_signup"
-                  android:parentActivityName=".LoginActivity">
+        <activity
+            android:name=".SignUpActivity"
+            android:label="@string/login_signup"
+            android:parentActivityName=".LoginActivity">
+        </activity>
+        <activity
+            android:name=".CreateIOU"
+            android:label="@string/title_activity_create_iou"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.wrongwaystudios.iou.MainActivity"/>
         </activity>
     </application>
 

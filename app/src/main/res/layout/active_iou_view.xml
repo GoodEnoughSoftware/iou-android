@@ -1,0 +1,116 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_height="wrap_content"
+              android:layout_width="match_parent"
+              xmlns:card_view="http://schemas.android.com/apk/res-auto" >
+        <!-- A CardView that contains a TextView -->
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        card_view:cardElevation="10sp"
+        android:layout_gravity="center"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="4dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:paddingBottom="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="aaronkidd96"
+                android:id="@+id/sender_text"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"/>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView3"
+                android:layout_alignBottom="@+id/sender_text"
+                android:layout_toEndOf="@+id/sender_text"
+                android:src="@drawable/ic_arrow_forward"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="ewadkins"
+                android:id="@+id/recipient_text"
+                android:layout_alignBottom="@+id/imageView3"
+                android:layout_toEndOf="@+id/imageView3"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/sender_text"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Pending"
+                    android:id="@+id/status_text"
+                    android:textStyle="italic"
+                    android:layout_alignBottom="@+id/textView4"
+                    android:layout_alignStart="@+id/sender_text"
+                    android:gravity="center"
+                    android:visibility="visible"/>
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/due_icon"
+                    android:src="@drawable/ic_due_black"
+                    android:padding="4dp"/>
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/important_icon"
+                    android:src="@drawable/ic_assignment_late_black"
+                    android:padding="4dp"
+                    android:visibility="visible"/>
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/note_icon"
+                    android:src="@drawable/ic_speaker_notes_black"
+                    android:padding="4dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="$100"
+                    android:id="@+id/amount_text"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginRight="8dp"
+                    android:layout_below="@+id/textView2"
+                    android:layout_alignParentEnd="true"
+                    android:layout_weight="1"
+                    android:gravity="right"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

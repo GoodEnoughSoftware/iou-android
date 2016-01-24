@@ -31,6 +31,8 @@ import android.widget.TextView;
 import com.wrongwaystudios.iou.resources.Globals;
 import com.wrongwaystudios.iou.resources.NotificationAdapter;
 import com.wrongwaystudios.iou.resources.OAuthObject;
+import com.wrongwaystudios.iou.resources.Transaction;
+import com.wrongwaystudios.iou.resources.TransactionsAdapter;
 import com.wrongwaystudios.iou.resources.User;
 import com.wrongwaystudios.iou.resources.UserNotification;
 
@@ -46,6 +48,11 @@ public class MainActivity extends AppCompatActivity
     private NotificationAdapter notificationAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
+
+    private SwipeRefreshLayout iouRefreshLayout;
+    private TransactionsAdapter transactionAdapter;
+    private RecyclerView.LayoutManager iouLayoutManager;
+    private RecyclerView iouRecycler;
 
     private TextView usernameLabel = null;
 
@@ -71,6 +78,8 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        // Navigation view code --------------------------------------------------------------------
 
         NavigationView navigationViewLeft = (NavigationView) findViewById(R.id.nav_view_left);
         View header = navigationViewLeft.getHeaderView(0);
@@ -114,6 +123,46 @@ public class MainActivity extends AppCompatActivity
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(navigationViewRight);
+
+        // Main IOU code ---------------------------------------------------------------------------
+
+        iouRecycler = (RecyclerView) findViewById(R.id.iou_recycler_view);
+        iouRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.iouRefreshLayout);
+        iouLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        iouRecycler.setLayoutManager(iouLayoutManager);
+        // Initially null
+        ArrayList<Transaction> emptyIous = new ArrayList<>();
+        transactionAdapter = new TransactionsAdapter(emptyIous, R.layout.active_iou_view);
+        iouRecycler.setAdapter(transactionAdapter);
+        transactionAdapter.notifyDataSetChanged();
+
+        ItemTouchHelper.SimpleCallback iouSimpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                //Remove swiped item from list and notify the RecyclerView
+                int del = viewHolder.getAdapterPosition();
+                //new DeleteNotificationsTask().execute(del);
+                //navigationViewRight.removeViewAt(del);
+                //Globals.mainUser.notifications.remove(del);
+                //notificationAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                //notificationAdapter.notifyDataSetChanged();
+            }
+        };
+
+        iouRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new GetActiveIousTask().execute();
+            }
+        });
+
+        ItemTouchHelper iouItemTouchHelper = new ItemTouchHelper(iouSimpleItemTouchCallback);
+        iouItemTouchHelper.attachToRecyclerView(iouRecycler);
 
     }
 
@@ -200,7 +249,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_ious) {
-            // Handle the camera action
+
         } else if (id == R.id.nav_pending) {
 
         } else if (id == R.id.nav_previous) {
@@ -219,6 +268,7 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     /**
      * Downloads notifications from the server
@@ -257,6 +307,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Deletes a notification from the server given a message id
+     */
     private class DeleteNotificationsTask extends AsyncTask<Integer, Void, String> {
 
         boolean notifDelete = false;
@@ -277,6 +330,48 @@ public class MainActivity extends AppCompatActivity
                 Log.e("NOTIF", "Notification was deleted");
             } else {
                 Log.e("NOTIF", "Notification was not deleted");
+            }
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+
+
+        }
+
+    }
+
+    /**
+     * Gets the active IOUs from the server
+     */
+    private class GetActiveIousTask extends AsyncTask<Integer, Void, String> {
+
+        boolean iousGet = false;
+
+        @Override
+        protected String doInBackground(Integer ... params) {
+
+            Globals.mainUser.activeIous = new ArrayList<>();
+            Globals.mainUser.activeIous.add(new Transaction(23.45, "4356", "5678"));
+            Globals.mainUser.activeIous.add(new Transaction(23.45, "4356", "5678"));
+            Globals.mainUser.activeIous.add(new Transaction(23.45, "4356", "5678"));
+            Globals.mainUser.activeIous.add(new Transaction(23.45, "4356", "5678"));
+            Globals.mainUser.activeIous.add(new Transaction(23.45, "4356", "5678"));
+            Globals.mainUser.activeIous.add(new Transaction(23.45, "4356", "5678"));
+
+            //iousGet = Globals.mainUser.getActiveTransactions();
+
+            return "Success";
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            if(iousGet) {
+                iouRefreshLayout.setRefreshing(false);
             }
 
         }

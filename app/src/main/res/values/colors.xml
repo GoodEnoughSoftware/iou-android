@@ -6,4 +6,5 @@
     <color name="colorAccent">#448AFF</color>
     <color name="colorPrimaryLight">#FFCDD2</color>
     <color name="divider">#B6B6B6</color>
+    <color name="colorCheck">#00c853</color>
 </resources>

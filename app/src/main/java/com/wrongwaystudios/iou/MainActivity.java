@@ -49,10 +49,12 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView.LayoutManager layoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    /*
     private SwipeRefreshLayout iouRefreshLayout;
     private TransactionsAdapter transactionAdapter;
     private RecyclerView.LayoutManager iouLayoutManager;
     private RecyclerView iouRecycler;
+    */
 
     private TextView usernameLabel = null;
 
@@ -129,6 +131,7 @@ public class MainActivity extends AppCompatActivity
 
         // Main IOU code ---------------------------------------------------------------------------
 
+        /*
         iouRecycler = (RecyclerView) findViewById(R.id.iou_recycler_view);
         iouRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.iouRefreshLayout);
         iouLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -166,6 +169,7 @@ public class MainActivity extends AppCompatActivity
 
         ItemTouchHelper iouItemTouchHelper = new ItemTouchHelper(iouSimpleItemTouchCallback);
         iouItemTouchHelper.attachToRecyclerView(iouRecycler);
+        */
 
     }
 
@@ -348,7 +352,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Gets the active IOUs from the server
-     */
+     *
     private class GetActiveIousTask extends AsyncTask<Integer, Void, String> {
 
         boolean iousGet = false;
@@ -386,7 +390,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-    }
+    }*/
 
     /**
      * Load notifications in the notification pane

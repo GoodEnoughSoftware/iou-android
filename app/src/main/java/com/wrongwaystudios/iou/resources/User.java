@@ -34,7 +34,7 @@ public class User {
     private final String successField = "success";
 
     public ArrayList<UserNotification> notifications;
-    public ArrayList<Transaction> activeIous;
+    public ArrayList<Transaction> allIOUs;
 
     private boolean inDB = false;
     private String lastError = null;
@@ -100,7 +100,7 @@ public class User {
 
         try {
 
-            activeIous = new ArrayList<>();
+            allIOUs = new ArrayList<>();
             for(int i = 0; i < result.length(); i++){
                 JSONObject iou = result.getJSONObject(i);
                 //String id = notif.getString("id");
@@ -180,4 +180,23 @@ public class User {
         this.lastError = lastError;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public Bitmap getProfilePic() {
+        return profilePic;
+    }
 }

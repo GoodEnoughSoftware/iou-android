@@ -55,7 +55,7 @@
             android:hint="@string/iou_create_date_hint"
             android:inputType="date"/>
 
-        <com.rengwuxian.materialedittext.MaterialAutoCompleteTextView
+        <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/note_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

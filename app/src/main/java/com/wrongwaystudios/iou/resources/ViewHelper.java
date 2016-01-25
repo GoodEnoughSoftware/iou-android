@@ -41,6 +41,36 @@ public class ViewHelper {
 
     }
 
+    /**
+     * Starts the check operation on an IOU
+     * @param pos
+     */
+    public static void startIouCheckOperation(int pos){
+
+        Transaction iou = Globals.mainUser.allIOUs.get(pos);
+
+    }
+
+    /**
+     * Starts the edit operation on an IOU
+     * @param pos
+     */
+    public static void startIouEditOperation(int pos){
+
+        Transaction iou = Globals.mainUser.allIOUs.get(pos);
+
+    }
+
+    /**
+     * Starts the notify operation on an IOU
+     * @param pos
+     */
+    public static void startIouNotifyOperation(int pos){
+
+        Transaction iou = Globals.mainUser.allIOUs.get(pos);
+
+    }
+
 
 
 }

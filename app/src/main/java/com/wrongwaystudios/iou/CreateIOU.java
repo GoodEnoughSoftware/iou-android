@@ -1,5 +1,6 @@
 package com.wrongwaystudios.iou;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class CreateIOU extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -40,7 +42,14 @@ public class CreateIOU extends AppCompatActivity implements DatePickerDialog.OnD
     private UserSearchObject[] receiverUsers;
 
     private String BASE_FIND_URL = "api/users/find?";
+    private String BASE_CREATE_IOU_SELF_URL = "api/ious/self/";
+    private String BASE_CREATE_IOU_OTHER_URL = "api/ious/other/";
     private final int QUERY_LIMIT = 10;
+
+    private final String USERNAME_FIELD = "username";
+    private final String AMOUNT_FIELD = "amount";
+    private final String DESCRIPTION_FIELD = "description";
+    private final String DUE_DATE_FIELD = "dueDate";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +63,12 @@ public class CreateIOU extends AppCompatActivity implements DatePickerDialog.OnD
             @Override
             public void onClick(View view) {
                 boolean valid = validate();
-                Log.e("Create IOU: ", "" + valid);
+                if(valid){
+                    boolean success = sendCreate();
+                    if(success){
+                        ((Activity) context).finish();
+                    }
+                }
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         //.setAction("Action", null).show();
             }
@@ -170,6 +184,68 @@ public class CreateIOU extends AppCompatActivity implements DatePickerDialog.OnD
         boolean amountValid = amountField.validate("\\d+(\\.\\d+)*", getString(R.string.iou_create_amount_error));
 
         return senderValid && receiverValid && amountValid;
+
+    }
+
+    /**
+     * Makes the post request for the iou
+     * @return whether or not the request was made
+     */
+    public boolean sendCreate(){
+
+        MaterialAutoCompleteTextView senderField = (MaterialAutoCompleteTextView) findViewById(R.id.sender_edit);
+        MaterialAutoCompleteTextView receiverField = (MaterialAutoCompleteTextView) findViewById(R.id.recipient_edit);
+        MaterialEditText amountField = (MaterialEditText) findViewById(R.id.money_edit);
+        MaterialEditText dateField = (MaterialEditText) findViewById(R.id.date_edit);
+        MaterialEditText noteField = (MaterialEditText) findViewById(R.id.note_edit);
+
+        String sender = senderField.getText().toString();
+        String receiver = receiverField.getText().toString();
+        String amount = amountField.getText().toString();
+        String date = dateField.getText().toString();
+        String note = noteField.getText().toString();
+
+        String url = "";
+
+        HashMap<String, String> params = new HashMap<>();
+
+        // Send self IOU
+        if(sender.equals(receiver)){
+            // Send error, can't have the same user
+        }
+        else if(sender.equals(Globals.mainUser.getUsername())) {
+            params.put(USERNAME_FIELD, receiver);
+            url = Globals.BASE_API_URL + BASE_CREATE_IOU_SELF_URL;
+        }
+        else if (receiver.equals(Globals.mainUser.getUsername())) {
+            params.put(USERNAME_FIELD, sender);
+            url = Globals.BASE_API_URL + BASE_CREATE_IOU_OTHER_URL;
+        }
+        else {
+            // Send error, need to be a receiver or sender
+        }
+
+        params.put(AMOUNT_FIELD, amount);
+        if(!note.equals("")){params.put(DESCRIPTION_FIELD, note);}
+        if(!date.equals("")){params.put(DUE_DATE_FIELD, date);}
+
+        JSONObject result = Constructors.postData(url, params, Globals.authObject.getAccessToken());
+
+        try {
+
+            Log.e("****", "Result " + result.toString());
+
+            return result.getBoolean("success");
+
+        } catch (Exception e) {
+
+            Log.e("ERROR", e.getMessage());
+
+            return false;
+
+        }
+
+
 
     }
 

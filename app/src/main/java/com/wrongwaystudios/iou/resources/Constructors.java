@@ -54,7 +54,7 @@ public class Constructors {
             conn.setRequestProperty("charset","utf-8");
 
             if(authorization != null){
-                conn.setRequestProperty("Authorization", authorization);
+                conn.setRequestProperty("Authorization", "Bearer " + authorization);
             }
 
             // Begin writing to the server
@@ -62,6 +62,8 @@ public class Constructors {
             wr.writeBytes(postData);
             wr.flush();
             wr.close();
+
+            Log.e("WRITE", "");
 
             //Log.e("SERVER:" , "" + conn.getResponseCode());
 
@@ -74,6 +76,8 @@ public class Constructors {
                 response.append(inputLine);
             }
             in.close();
+
+            Log.e("READ", "");
 
             // Return the result
             return new JSONObject(response.toString());

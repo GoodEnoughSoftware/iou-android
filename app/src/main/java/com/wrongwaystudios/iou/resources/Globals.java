@@ -19,4 +19,21 @@ public class Globals {
     public static OAuthObject authObject = null;
     public static User mainUser = null;
 
+    public static String statusString(IOUStatus status) {
+
+        switch (status){
+            case ACTIVE:
+                return "Active";
+            case PENDING:
+                return "Pending";
+            case COMPLETED:
+                return "Completed";
+            case FORGIVEN:
+                return "Forgiven";
+            default:
+                return "Pending";
+        }
+
+    }
+
 }

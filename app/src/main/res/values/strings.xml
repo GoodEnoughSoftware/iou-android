@@ -40,11 +40,14 @@
 
     <!-- Strings related to the IOU creation activity -->
     <string name="title_activity_create_iou">Create IOU</string>
-    <string name="iou_create_amount_hint">Amount</string>
+    <string name="iou_create_amount_hint">Amount ($)</string>
     <string name="iou_create_recipient_hint">Recipient</string>
     <string name="iou_create_sender_hint">Sender</string>
-    <string name="iou_create_note_hint">Attach note: </string>
-    <string name="iou_create_date_hint">Due date: </string>
+    <string name="iou_create_note_hint">Note (optional)</string>
+    <string name="iou_create_date_hint">Due Date (optional)</string>
     <string name="iou_create_send_notif_check">Send Notification</string>
+    <string name="iou_create_amount_error">Must enter a decimal</string>
+    <string name="iou_create_sender_error">Must enter a valid user</string>
+    <string name="iou_create_receiver_error">Must enter a valud user</string>
 
 </resources>

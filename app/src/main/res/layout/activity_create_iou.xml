@@ -30,23 +30,6 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/amount_edit"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/login_password"
-                app:met_floatingLabel="highlight"
-                app:met_baseColor="#ffffff"
-                app:met_primaryColor="#ffffff"
-                app:met_textColor="#ffffff"
-                app:met_textColorHint="#ffffff"
-                app:met_errorColor="#ffffff"
-                app:met_helperTextColor="#ffffff"
-                app:met_underlineColor="#ffffff"
-                app:met_floatingLabelTextColor="#ffffff"
-                android:textColor="@android:color/white"
-                android:inputType="numberDecimal"/>
-
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 

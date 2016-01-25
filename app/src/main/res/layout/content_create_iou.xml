@@ -9,10 +9,62 @@
     tools:context="com.wrongwaystudios.iou.CreateIOU"
     tools:showIn="@layout/activity_create_iou">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="Content"/>
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+        <com.rengwuxian.materialedittext.MaterialAutoCompleteTextView
+            android:id="@+id/sender_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:met_iconLeft="@drawable/ic_person_outline_black"
+            app:met_floatingLabel="highlight"
+            android:hint="@string/iou_create_sender_hint"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/money_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:met_iconLeft="@drawable/ic_arrow_downward_black"
+            app:met_floatingLabel="highlight"
+            android:hint="@string/iou_create_amount_hint"
+            android:inputType="numberDecimal"/>
+
+        <com.rengwuxian.materialedittext.MaterialAutoCompleteTextView
+            android:id="@+id/recipient_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:met_iconLeft="@drawable/ic_person_black"
+            app:met_floatingLabel="highlight"
+            android:hint="@string/iou_create_recipient_hint"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/date_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:met_iconLeft="@drawable/ic_assignment_late_black"
+            app:met_floatingLabel="highlight"
+            app:met_singleLineEllipsis="true"
+            android:hint="@string/iou_create_date_hint"
+            android:inputType="date"/>
+
+        <com.rengwuxian.materialedittext.MaterialAutoCompleteTextView
+            android:id="@+id/note_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:met_iconLeft="@drawable/ic_speaker_notes_black"
+            app:met_floatingLabel="highlight"
+            app:met_singleLineEllipsis="true"
+            android:hint="@string/iou_create_note_hint"/>
+
+    </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

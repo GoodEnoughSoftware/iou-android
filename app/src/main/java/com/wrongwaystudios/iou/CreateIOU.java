@@ -229,8 +229,6 @@ public class CreateIOU extends AppCompatActivity implements DatePickerDialog.OnD
 
             JSONObject result = Constructors.postDataOkHTTP(url, params, Globals.authObject.getAccessToken());
 
-            Log.e("****", "Result " + result.toString());
-
             return result.getBoolean("success");
 
         } catch (Exception e) {

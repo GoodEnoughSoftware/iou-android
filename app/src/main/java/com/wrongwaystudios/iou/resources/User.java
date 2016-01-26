@@ -119,8 +119,6 @@ public class User {
 
         JSONArray result = Constructors.getDataAsArray(URL, Globals.authObject.getAccessToken());
 
-        Log.e("IOURES", result.toString());
-
         try {
 
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

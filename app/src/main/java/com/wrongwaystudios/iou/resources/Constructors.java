@@ -310,7 +310,7 @@ public class Constructors {
             }
             in.close();
 
-            Log.e("DELETE", response.toString());
+            //Log.e("DELETE", response.toString());
 
             // Return the result
             return new JSONObject(response.toString());

@@ -4,23 +4,23 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_ious"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_person_black"
             android:title="@string/nav_my_ious"/>
         <item
             android:id="@+id/nav_pending"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_whatshot_black"
             android:title="@string/nav_pending_ious"/>
         <item
             android:id="@+id/nav_previous"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_history_black"
             android:title="@string/nav_previous_ious"/>
         <item
             android:id="@+id/nav_friends"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_group_black"
             android:title="@string/nav_friends"/>
         <item
             android:id="@+id/nav_create"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_add_box_black"
             android:title="@string/nav_create_new"/>
     </group>
 
@@ -28,7 +28,7 @@
         <menu>
             <item
                 android:id="@+id/nav_edit_prof"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_edit_black"
                 android:title="@string/nav_edit_profile"/>
             <item
                 android:id="@+id/nav_invite"
@@ -36,7 +36,7 @@
                 android:title="@string/nav_send_invite"/>
             <item
                 android:id="@+id/nav_sign_out"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_reply_black"
                 android:title="@string/nav_sign_out"/>
         </menu>
     </item>

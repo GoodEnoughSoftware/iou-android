@@ -6,8 +6,12 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * A class that represents a user from the database
@@ -32,6 +36,17 @@ public class User {
     private final String usernameField = "username";
     private final String passwordField = "password";
     private final String successField = "success";
+
+    // IOU Fields
+    private final String idField = "_id";
+    private final String payerField = "payer";
+    private final String amountField = "amount";
+    private final String recipientField = "recipient";
+    private final String descriptionField = "description";
+    private final String createdField = "created";
+    private final String createdByField = "createdBy";
+    private final String lastRemindedField = "lastReminded";
+    private final String dueDateField = "dueDate";
 
     public ArrayList<UserNotification> notifications;
     public ArrayList<Transaction> allIOUs;
@@ -96,20 +111,55 @@ public class User {
      */
     public boolean getActiveTransactions(){
 
-        JSONArray result = Constructors.getDataAsArray(Globals.BASE_API_URL + BASE_IOUS_ACT_URL, Globals.authObject.getAccessToken());
+        return getIOUs(Globals.BASE_API_URL + BASE_IOUS_ACT_URL, IOUStatus.ACTIVE);
+
+    }
+
+    private boolean getIOUs(String URL, IOUStatus type){
+
+        JSONArray result = Constructors.getDataAsArray(URL, Globals.authObject.getAccessToken());
+
+        Log.e("IOURES", result.toString());
 
         try {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
             allIOUs = new ArrayList<>();
             for(int i = 0; i < result.length(); i++){
                 JSONObject iou = result.getJSONObject(i);
-                //String id = notif.getString("id");
-                //iou.add(new Transaction());
+
+                String id = null;
+                String payer = null;
+                double amount = 0;
+                String recipient = null;
+                String description = null;
+                Date created = null;
+                String createdBy = null;
+                Date lastReminded = null;
+                Date dueDate = null;
+
+                if(iou.has(idField)){id = iou.getString(idField);}
+                if(iou.has(payerField)){payer = iou.getString(payerField);}
+                if(iou.has(amountField)){amount = iou.getDouble(amountField);}
+                if(iou.has(recipientField)){recipient = iou.getString(recipientField);}
+                if(iou.has(descriptionField) && iou.getString(descriptionField) != null){description = iou.getString(descriptionField);}
+                if(iou.has(createdField)){created = dateFormat.parse(iou.getString(createdField).substring(0,9));}
+                if(iou.has(createdByField)){createdBy = iou.getString(createdByField);}
+                if(iou.has(lastRemindedField)){lastReminded = dateFormat.parse(iou.getString(lastRemindedField).substring(0,9));}
+                if(iou.has(dueDateField) && iou.getString(dueDateField).length() != 4){dueDate = dateFormat.parse(iou.getString(dueDateField).substring(0,9));}
+
+                Transaction newIou = new Transaction(id, amount, recipient, payer, dueDate, type, description, created, createdBy, lastReminded);
+
+                allIOUs.add(newIou);
+
             }
 
             return true;
 
         } catch (Exception e) {
+
+            Log.e("***", e.toString());
 
             return false;
 
@@ -124,6 +174,8 @@ public class User {
     public boolean getNotifications(){
 
         JSONArray result = Constructors.getDataAsArray(Globals.BASE_API_URL + BASE_NOTI_URL, Globals.authObject.getAccessToken());
+
+        notifications = new ArrayList<>();
 
         try {
 

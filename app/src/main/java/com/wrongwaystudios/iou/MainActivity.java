@@ -49,12 +49,10 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView.LayoutManager layoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    /*
     private SwipeRefreshLayout iouRefreshLayout;
     private TransactionsAdapter transactionAdapter;
     private RecyclerView.LayoutManager iouLayoutManager;
     private RecyclerView iouRecycler;
-    */
 
     private TextView usernameLabel = null;
 
@@ -131,7 +129,7 @@ public class MainActivity extends AppCompatActivity
 
         // Main IOU code ---------------------------------------------------------------------------
 
-        /*
+
         iouRecycler = (RecyclerView) findViewById(R.id.iou_recycler_view);
         iouRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.iouRefreshLayout);
         iouLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -142,24 +140,6 @@ public class MainActivity extends AppCompatActivity
         iouRecycler.setAdapter(transactionAdapter);
         transactionAdapter.notifyDataSetChanged();
 
-        ItemTouchHelper.SimpleCallback iouSimpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                //Remove swiped item from list and notify the RecyclerView
-                int del = viewHolder.getAdapterPosition();
-                //new DeleteNotificationsTask().execute(del);
-                //navigationViewRight.removeViewAt(del);
-                //Globals.mainUser.notifications.remove(del);
-                //notificationAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-                //notificationAdapter.notifyDataSetChanged();
-            }
-        };
-
         iouRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -167,9 +147,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        ItemTouchHelper iouItemTouchHelper = new ItemTouchHelper(iouSimpleItemTouchCallback);
-        iouItemTouchHelper.attachToRecyclerView(iouRecycler);
-        */
 
     }
 
@@ -206,6 +183,7 @@ public class MainActivity extends AppCompatActivity
 
                 // Get their notifications (asynchronously)
                 new GetNotificationsTask().execute();
+                //new GetActiveIousTask().execute();
             }
 
         }
@@ -352,7 +330,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Gets the active IOUs from the server
-     *
+     */
     private class GetActiveIousTask extends AsyncTask<Integer, Void, String> {
 
         boolean iousGet = false;
@@ -360,15 +338,11 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected String doInBackground(Integer ... params) {
 
-            Globals.mainUser.activeIous = new ArrayList<>();
-            Globals.mainUser.activeIous.add(new Transaction(23.45, "4356", "5678"));
-            Globals.mainUser.activeIous.add(new Transaction(23.45, "4356", "5678"));
-            Globals.mainUser.activeIous.add(new Transaction(23.45, "4356", "5678"));
-            Globals.mainUser.activeIous.add(new Transaction(23.45, "4356", "5678"));
-            Globals.mainUser.activeIous.add(new Transaction(23.45, "4356", "5678"));
-            Globals.mainUser.activeIous.add(new Transaction(23.45, "4356", "5678"));
+            Log.e("IOUS", "About to get ious");
 
-            //iousGet = Globals.mainUser.getActiveTransactions();
+            iousGet = Globals.mainUser.getActiveTransactions();
+
+            Log.e("IOUS", "Got IOUS: " + Globals.mainUser.allIOUs.size());
 
             return "Success";
 
@@ -377,8 +351,10 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(String result) {
 
+            iouRefreshLayout.setRefreshing(false);
+
             if(iousGet) {
-                iouRefreshLayout.setRefreshing(false);
+                showIous();
             }
 
         }
@@ -390,7 +366,17 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-    }*/
+    }
+
+    /**
+     * Shows the IOU in the main adapter
+     */
+    public void showIous(){
+
+        transactionAdapter = new TransactionsAdapter(Globals.mainUser.allIOUs, R.layout.active_iou_view);
+        iouRecycler.setAdapter(transactionAdapter);
+
+    }
 
     /**
      * Load notifications in the notification pane

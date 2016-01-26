@@ -14,12 +14,15 @@ public class Transaction {
     private double amount = 0.00;
     private String recipientUsername = "";
     private String senderUsername = "";
+    private String createdBy = "";
     private Date dueDate = null;
+    private Date created = null;
+    private Date lastReminded = null;
     private IOUStatus iouStatus;
     private String note = "";
 
     public Transaction(String id, double amount, String recipientUsername, String senderUsername, Date dueDate,
-                       IOUStatus iouStatus, String note){
+                       IOUStatus iouStatus, String note, Date created, String createdBy, Date lastReminded){
 
         this.id = id;
         this.amount = amount;
@@ -28,6 +31,9 @@ public class Transaction {
         this.dueDate = dueDate;
         this.iouStatus = iouStatus;
         this.note = note;
+        this.created = created;
+        this.createdBy = createdBy;
+        this.lastReminded = lastReminded;
 
     }
 
@@ -57,5 +63,17 @@ public class Transaction {
 
     public String getNote() {
         return note;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public Date getLastReminded() {
+        return lastReminded;
     }
 }

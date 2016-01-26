@@ -49,5 +49,8 @@
     <string name="iou_create_amount_error">Must enter a decimal</string>
     <string name="iou_create_sender_error">Must enter a valid user</string>
     <string name="iou_create_receiver_error">Must enter a valud user</string>
+    <string name="iou_create_error_title">Create Error</string>
+    <string name="iou_create_error_content">There was an error creating this IOU (please try again later).</string>
+    <string name="iou_create_error_ok">Ok</string>
 
 </resources>

@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.MultiAutoCompleteTextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.rengwuxian.materialedittext.MaterialMultiAutoCompleteTextView;
@@ -64,10 +65,7 @@ public class CreateIOU extends AppCompatActivity implements DatePickerDialog.OnD
             public void onClick(View view) {
                 boolean valid = validate();
                 if(valid){
-                    boolean success = sendCreate();
-                    if(success){
-                        ((Activity) context).finish();
-                    }
+                    new CreateTask().execute();
                 }
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         //.setAction("Action", null).show();
@@ -98,8 +96,6 @@ public class CreateIOU extends AppCompatActivity implements DatePickerDialog.OnD
 
             }
         });
-
-
 
         receiverAutoComplete = (MaterialAutoCompleteTextView) findViewById(R.id.recipient_edit);
         receiverAdapter = new UserAdapter(this, R.layout.user_dropdown, new UserSearchObject[0]);
@@ -229,9 +225,9 @@ public class CreateIOU extends AppCompatActivity implements DatePickerDialog.OnD
         if(!note.equals("")){params.put(DESCRIPTION_FIELD, note);}
         if(!date.equals("")){params.put(DUE_DATE_FIELD, date);}
 
-        JSONObject result = Constructors.postData(url, params, Globals.authObject.getAccessToken());
-
         try {
+
+            JSONObject result = Constructors.postDataOkHTTP(url, params, Globals.authObject.getAccessToken());
 
             Log.e("****", "Result " + result.toString());
 
@@ -244,8 +240,6 @@ public class CreateIOU extends AppCompatActivity implements DatePickerDialog.OnD
             return false;
 
         }
-
-
 
     }
 
@@ -356,5 +350,49 @@ public class CreateIOU extends AppCompatActivity implements DatePickerDialog.OnD
         }
 
     }
+
+    /**
+     * Query's the server for users
+     */
+    private class CreateTask extends AsyncTask<String, Void, String> {
+
+        boolean success = false;
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            success = sendCreate();
+
+            return "Success";
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            if(success){
+                ((Activity) context).finish();
+            }
+            else {
+                new MaterialDialog.Builder(context)
+                        .title(R.string.iou_create_error_title)
+                        .positiveText(R.string.iou_create_error_ok)
+                        .content(R.string.iou_create_error_content)
+                        .build().show();
+
+            }
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+
+
+        }
+
+    }
+
+
 
 }

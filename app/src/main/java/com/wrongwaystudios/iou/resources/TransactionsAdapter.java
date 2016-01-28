@@ -71,7 +71,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
 
         final Transaction iou = Globals.mainUser.allIOUs.get(position);
 
-        holder.transactionView.setOnClickListener(new View.OnClickListener() {
+        holder.transactionView.findViewById(R.id.iou_holder).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Globals.globalContext, DetailActivity.class);

@@ -38,7 +38,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_checked_mark"
+                        android:src="@drawable/ic_attach_money_white"
                         android:layout_gravity="center"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"/>
@@ -72,6 +72,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/iou_holder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 >

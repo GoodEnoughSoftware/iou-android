@@ -7,4 +7,6 @@
     <color name="colorPrimaryLight">#FFCDD2</color>
     <color name="divider">#B6B6B6</color>
     <color name="colorCheck">#00c853</color>
+    <color name="colorGreen">#4caf50</color>
+    <color name="colorRed">#c62828</color>
 </resources>

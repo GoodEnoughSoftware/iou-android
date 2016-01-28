@@ -55,6 +55,9 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView iouRecycler;
 
     private TextView usernameLabel = null;
+    private TextView fullNameLabel = null;
+
+    private int currentTask = R.id.nav_ious;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -64,13 +67,12 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Intent createIntent = new Intent(thisActivity, CreateIOU.class);
-                startActivity(createIntent);
+                startCreateActivity();
                 /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
             }
@@ -82,11 +84,14 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        Globals.globalContext = this;
+
         // Navigation view code --------------------------------------------------------------------
 
         NavigationView navigationViewLeft = (NavigationView) findViewById(R.id.nav_view_left);
         View header = navigationViewLeft.getHeaderView(0);
         usernameLabel = (TextView) header.findViewById(R.id.username_label);
+        fullNameLabel = (TextView) header.findViewById(R.id.fullname_label);
         navigationViewLeft.setNavigationItemSelectedListener(this);
 
         navigationViewRight = (RecyclerView) findViewById(R.id.recycler_view_right);
@@ -129,7 +134,6 @@ public class MainActivity extends AppCompatActivity
 
         // Main IOU code ---------------------------------------------------------------------------
 
-
         iouRecycler = (RecyclerView) findViewById(R.id.iou_recycler_view);
         iouRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.iouRefreshLayout);
         iouLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -143,7 +147,34 @@ public class MainActivity extends AppCompatActivity
         iouRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new GetActiveIousTask().execute();
+
+                int id = currentTask;
+
+                if (id == R.id.nav_ious) {
+                    new GetActiveIousTask().execute();
+                } else if (id == R.id.nav_pending) {
+                    new GetPendingIousTask().execute();
+                } else if (id == R.id.nav_previous) {
+
+                } else if (id == R.id.nav_friends) {
+
+                } else if (id == R.id.nav_create) {
+                    startCreateActivity();
+                } else if (id == R.id.nav_edit_prof) {
+
+                } else if (id == R.id.nav_sign_out) {
+                    signOut();
+                }
+            }
+        });
+
+        iouRecycler.addOnScrollListener(new RecyclerView.OnScrollListener(){
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+                if (dy > 0 && fab.isShown())
+                    fab.hide();
+                else if (dy < 0 && !fab.isShown())
+                    fab.show();
             }
         });
 
@@ -160,8 +191,8 @@ public class MainActivity extends AppCompatActivity
 
             // Create a user object
             Globals.mainUser = new User(Globals.authObject.getUsername());
-            usernameLabel.setText(Globals.authObject.getUsername());
-
+            usernameLabel.setText(Globals.mainUser.getUsername());
+            fullNameLabel.setText(Globals.mainUser.getFullName());
             // Get their notifications (asynchronously)
             new GetNotificationsTask().execute();
 
@@ -181,9 +212,12 @@ public class MainActivity extends AppCompatActivity
                 Globals.mainUser = new User(Globals.authObject.getUsername());
                 usernameLabel.setText(Globals.authObject.getUsername());
 
+
                 // Get their notifications (asynchronously)
                 new GetNotificationsTask().execute();
-                //new GetActiveIousTask().execute();
+
+                // Get their active IOUs (asynchronously)
+                new GetActiveIousTask().execute();
             }
 
         }
@@ -233,10 +267,12 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        currentTask = id;
+
         if (id == R.id.nav_ious) {
-
+            new GetActiveIousTask().execute();
         } else if (id == R.id.nav_pending) {
-
+            new GetPendingIousTask().execute();
         } else if (id == R.id.nav_previous) {
 
         } else if (id == R.id.nav_friends) {
@@ -253,7 +289,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
     /**
      * Downloads notifications from the server
@@ -338,11 +373,51 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected String doInBackground(Integer ... params) {
 
-            Log.e("IOUS", "About to get ious");
+            Log.e("IOUS", "About to get active ious");
 
             iousGet = Globals.mainUser.getActiveTransactions();
 
-            Log.e("IOUS", "Got IOUS: " + Globals.mainUser.allIOUs.size());
+            Log.e("IOUS", "Got active IOUS: " + Globals.mainUser.allIOUs.size());
+
+            return "Success";
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            iouRefreshLayout.setRefreshing(false);
+
+            if(iousGet) {
+                showIous();
+            }
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+
+
+        }
+
+    }
+
+    /**
+     * Gets the pending IOUs from the server
+     */
+    private class GetPendingIousTask extends AsyncTask<Integer, Void, String> {
+
+        boolean iousGet = false;
+
+        @Override
+        protected String doInBackground(Integer ... params) {
+
+            Log.e("IOUS", "About to get pending ious");
+
+            iousGet = Globals.mainUser.getPendingTransactions();
+
+            Log.e("IOUS", "Got pending IOUS: " + Globals.mainUser.allIOUs.size());
 
             return "Success";
 
@@ -400,6 +475,14 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(thisActivity, LoginActivity.class);
         startActivity(intent);
         ((Activity) thisActivity).finish();
+    }
+
+    /**
+     * Starts the activity to create a new IOU
+     */
+    public void startCreateActivity(){
+        Intent createIntent = new Intent(thisActivity, CreateIOU.class);
+        startActivity(createIntent);
     }
 
 }

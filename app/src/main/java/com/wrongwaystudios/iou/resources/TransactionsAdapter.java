@@ -1,5 +1,6 @@
 package com.wrongwaystudios.iou.resources;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +9,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wrongwaystudios.iou.DetailActivity;
+import com.wrongwaystudios.iou.MainActivity;
 import com.wrongwaystudios.iou.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+
+import mehdi.sakout.fancybuttons.FancyButton;
 
 /**
  * Adapter that handles the display of ious
@@ -60,6 +66,18 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
+        final Transaction iou = Globals.mainUser.allIOUs.get(position);
+
+        holder.transactionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Globals.globalContext, DetailActivity.class);
+                intent.putExtra("isEditing", false);
+                intent.putExtra("iouObject", iou);
+                Globals.globalContext.startActivity(intent);
+            }
+        });
+
         TextView senderView = (TextView) holder.transactionView.findViewById(R.id.sender_text);
         TextView recipientView = (TextView) holder.transactionView.findViewById(R.id.recipient_text);
         TextView statusView = (TextView) holder.transactionView.findViewById(R.id.status_text);
@@ -67,17 +85,21 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         ImageView dueIcon = (ImageView) holder.transactionView.findViewById(R.id.due_icon);
         ImageView importantIcon = (ImageView) holder.transactionView.findViewById(R.id.important_icon);
         ImageView noteIcon = (ImageView) holder.transactionView.findViewById(R.id.note_icon);
+        FancyButton pendingButton = (FancyButton) holder.transactionView.findViewById(R.id.btn_accept);
         FrameLayout checkFrame = (FrameLayout) holder.transactionView.findViewById(R.id.check_frame);
         FrameLayout editFrame = (FrameLayout) holder.transactionView.findViewById(R.id.edit_frame);
         FrameLayout notifyFrame = (FrameLayout) holder.transactionView.findViewById(R.id.notify_frame);
 
-        Transaction iou = Globals.mainUser.allIOUs.get(position);
+        DecimalFormat df = new DecimalFormat("#.00");
+        int textColor = iou.getSenderUsername().equals(Globals.mainUser.getUsername()) ? R.color.colorRed : R.color.colorGreen;
 
         senderView.setText(iou.getSenderUsername());
         recipientView.setText(iou.getRecipientUsername());
         statusView.setText(Globals.statusString(iou.getIouStatus()));
-        amountView.setText("$" + iou.getAmount());
+        amountView.setText("$" + df.format(iou.getAmount()));
+        amountView.setTextColor(Globals.globalContext.getResources().getColor(textColor));
         dueIcon.setVisibility(iou.getDueDate() == null ? View.GONE : View.VISIBLE);
+        pendingButton.setVisibility(iou.getIouStatus() == IOUStatus.PENDING ? View.VISIBLE : View.GONE);
         importantIcon.setVisibility(View.GONE);
         noteIcon.setVisibility(iou.getNote() == null || iou.getNote().equals("") ? View.GONE : View.VISIBLE);
 
@@ -90,7 +112,11 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         editFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewHelper.startIouEditOperation(position);
+                //ViewHelper.startIouEditOperation(position);
+                Intent intent = new Intent(Globals.globalContext, DetailActivity.class);
+                intent.putExtra("isEditing", true);
+                intent.putExtra("iouObject", iou);
+                Globals.globalContext.startActivity(intent);
             }
         });
         notifyFrame.setOnClickListener(new View.OnClickListener() {

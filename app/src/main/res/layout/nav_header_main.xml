@@ -41,21 +41,4 @@
             android:layout_marginBottom="16dp"/>
     </LinearLayout>
 
-    <com.mikhaellopez.circularfillableloaders.CircularFillableLoaders
-        android:id="@+id/circularFillableLoaders"
-        android:layout_width="0dp"
-        android:layout_height="fill_parent"
-        android:src="@drawable/money"
-        app:border="true"
-        app:border_width="3dp"
-        app:progress="80"
-        app:wave_amplitude="0.06"
-        app:wave_color="#3f51b5"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:layout_marginLeft="38dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"/>
-
 </LinearLayout>

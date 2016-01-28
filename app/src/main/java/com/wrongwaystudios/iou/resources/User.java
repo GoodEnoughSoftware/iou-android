@@ -30,11 +30,14 @@ public class User {
     private final String BASE_USER_URL = "api/users";
     private final String BASE_NOTI_URL = "api/notifications/";
     private final String BASE_IOUS_ACT_URL = "api/ious/active/";
+    private final String BASE_IOUS_PEN_URL = "api/ious/pending/";
 
     private final String clientIdField = "client_id";
     private final String clientSecretField = "client_secret";
     private final String usernameField = "username";
     private final String passwordField = "password";
+    private final String firstNameField = "firstName";
+    private final String lastNameField = "lastName";
     private final String successField = "success";
 
     // IOU Fields
@@ -66,9 +69,10 @@ public class User {
      * @param password The desired password
      * @return whether or not the user was successfully added
      */
-    public boolean addUser(String username, String password){
+    public boolean addUser(String username, String password, String firstName, String lastName){
 
         this.username = username;
+        this.fullName = firstName + " " + lastName;
 
         // Set the parameters
         HashMap<String, String> params = new HashMap<>();
@@ -76,6 +80,8 @@ public class User {
         params.put(clientSecretField, Globals.CLIENT_SECRET);
         params.put(usernameField, username);
         params.put(passwordField, password);
+        params.put(firstNameField, firstName);
+        params.put(lastNameField, lastName);
 
         // POST the data and obtain a JSON result
         JSONObject result = Constructors.postData(Globals.BASE_API_URL + BASE_USER_URL, params, null);
@@ -107,7 +113,7 @@ public class User {
 
     /**
      * Gets a list of active IOUs from the server
-     * @return
+     * @return Whether or not this operation was a success
      */
     public boolean getActiveTransactions(){
 
@@ -115,6 +121,22 @@ public class User {
 
     }
 
+    /**
+     * Gets a list of pending IOUs from the server
+     * @return Whether or not this operation was a success
+     */
+    public boolean getPendingTransactions(){
+
+        return getIOUs(Globals.BASE_API_URL + BASE_IOUS_PEN_URL, IOUStatus.PENDING);
+
+    }
+
+    /**
+     * Downloads IOUs from the given url
+     * @param URL
+     * @param type
+     * @return Whether or not this operation was a success
+     */
     private boolean getIOUs(String URL, IOUStatus type){
 
         JSONArray result = Constructors.getDataAsArray(URL, Globals.authObject.getAccessToken());

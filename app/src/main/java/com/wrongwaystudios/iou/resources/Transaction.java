@@ -1,5 +1,8 @@
 package com.wrongwaystudios.iou.resources;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
@@ -8,7 +11,7 @@ import java.util.Date;
  * @date 1/23/16
  * @version 0.1
  */
-public class Transaction {
+public class Transaction implements Parcelable{
 
     private String id;
     private double amount = 0.00;
@@ -76,4 +79,53 @@ public class Transaction {
     public Date getLastReminded() {
         return lastReminded;
     }
+
+    protected Transaction(Parcel in) {
+        id = in.readString();
+        amount = in.readDouble();
+        recipientUsername = in.readString();
+        senderUsername = in.readString();
+        createdBy = in.readString();
+        long tmpDueDate = in.readLong();
+        dueDate = tmpDueDate != -1 ? new Date(tmpDueDate) : null;
+        long tmpCreated = in.readLong();
+        created = tmpCreated != -1 ? new Date(tmpCreated) : null;
+        long tmpLastReminded = in.readLong();
+        lastReminded = tmpLastReminded != -1 ? new Date(tmpLastReminded) : null;
+        iouStatus = (IOUStatus) in.readValue(IOUStatus.class.getClassLoader());
+        note = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeDouble(amount);
+        dest.writeString(recipientUsername);
+        dest.writeString(senderUsername);
+        dest.writeString(createdBy);
+        dest.writeLong(dueDate != null ? dueDate.getTime() : -1L);
+        dest.writeLong(created != null ? created.getTime() : -1L);
+        dest.writeLong(lastReminded != null ? lastReminded.getTime() : -1L);
+        dest.writeValue(iouStatus);
+        dest.writeString(note);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Transaction> CREATOR = new Parcelable.Creator<Transaction>() {
+        @Override
+        public Transaction createFromParcel(Parcel in) {
+            return new Transaction(in);
+        }
+
+        @Override
+        public Transaction[] newArray(int size) {
+            return new Transaction[size];
+        }
+    };
+
 }

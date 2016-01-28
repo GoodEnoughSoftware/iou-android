@@ -373,11 +373,11 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected String doInBackground(Integer ... params) {
 
-            Log.e("IOUS", "About to get active ious");
+            //Log.e("IOUS", "About to get active ious");
 
             iousGet = Globals.mainUser.getActiveTransactions();
 
-            Log.e("IOUS", "Got active IOUS: " + Globals.mainUser.allIOUs.size());
+            //Log.e("IOUS", "Got active IOUS: " + Globals.mainUser.allIOUs.size());
 
             return "Success";
 
@@ -413,11 +413,11 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected String doInBackground(Integer ... params) {
 
-            Log.e("IOUS", "About to get pending ious");
+            //Log.e("IOUS", "About to get pending ious");
 
             iousGet = Globals.mainUser.getPendingTransactions();
 
-            Log.e("IOUS", "Got pending IOUS: " + Globals.mainUser.allIOUs.size());
+            //Log.e("IOUS", "Got pending IOUS: " + Globals.mainUser.allIOUs.size());
 
             return "Success";
 

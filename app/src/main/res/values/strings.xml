@@ -59,6 +59,13 @@
     <string name="iou_create_error_title">Create Error</string>
     <string name="iou_create_error_content">There was an error creating this IOU (please try again later).</string>
     <string name="iou_create_error_ok">Ok</string>
+
+    <!-- Strings related to the Pending IOUs -->
+    <string name="pending_reject">REJECT</string>
+    <string name="pending_accept">ACCEPT</string>
+    <string name="pending_waiting">WAITING FOR REPLY</string>
+
+
     <string name="title_activity_detail">DetailActivity</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"

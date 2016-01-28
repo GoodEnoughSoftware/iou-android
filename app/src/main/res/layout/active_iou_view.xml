@@ -20,6 +20,7 @@
         android:layout_marginTop="8dp">
 
         <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                        android:id="@+id/swipe_layout"
                                         android:layout_width="match_parent" android:layout_height="wrap_content">
 
             <LinearLayout
@@ -73,7 +74,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="8dp">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -112,7 +113,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_toStartOf="@+id/btn_accept">
+                    android:id="@+id/linearLayout">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -164,25 +165,64 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/linearLayout"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/pending_frame">
+
+                    <mehdi.sakout.fancybuttons.FancyButton
+                        android:id="@+id/btn_accept"
+                        android:layout_width="fill_parent"
+                        android:layout_height="32dp"
+                        fancy:fb_defaultColor="@color/colorGreen"
+                        fancy:fb_focusColor="@color/colorCheck"
+                        fancy:fb_fontIconResource="&#xf00c;"
+                        fancy:fb_fontIconSize="20sp"
+                        fancy:fb_iconPaddingLeft="0dp"
+                        fancy:fb_iconPaddingRight="4dp"
+                        fancy:fb_textColor="#FFFFFF"
+                        fancy:fb_text="@string/pending_accept"
+                        fancy:fb_textSize="17dp"
+                        android:layout_below="@+id/linearLayout"
+                        android:layout_centerHorizontal="true"
+                        android:layout_weight="1"/>
+
+                    <mehdi.sakout.fancybuttons.FancyButton
+                        android:id="@+id/btn_reject"
+                        android:layout_width="fill_parent"
+                        android:layout_height="32dp"
+                        fancy:fb_defaultColor="@color/colorPrimary"
+                        fancy:fb_focusColor="@color/colorPrimaryMid"
+                        fancy:fb_fontIconResource="&#xf00d;"
+                        fancy:fb_fontIconSize="20sp"
+                        fancy:fb_iconPaddingLeft="0dp"
+                        fancy:fb_iconPaddingRight="4dp"
+                        fancy:fb_textColor="#FFFFFF"
+                        fancy:fb_text="@string/pending_reject"
+                        fancy:fb_textSize="17dp"
+                        android:layout_below="@+id/linearLayout"
+                        android:layout_centerHorizontal="true"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
                 <mehdi.sakout.fancybuttons.FancyButton
-                    android:id="@+id/btn_accept"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginRight="10dp"
-                    fancy:fb_defaultColor="@color/colorPrimary"
-                    fancy:fb_focusColor="@color/colorPrimaryMid"
-                    fancy:fb_fontIconResource="&#xf00c;"
-                    fancy:fb_fontIconSize="20sp"
-                    fancy:fb_iconPaddingLeft="0dp"
-                    fancy:fb_iconPaddingRight="0dp"
-                    fancy:fb_radius="24dp"
+                    android:id="@+id/btn_pending"
+                    android:layout_width="fill_parent"
+                    android:layout_height="32dp"
+                    fancy:fb_defaultColor="@color/colorAccent"
+                    fancy:fb_focusColor="@color/colorAccent"
                     fancy:fb_textColor="#FFFFFF"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"/>
+                    fancy:fb_text="@string/pending_waiting"
+                    fancy:fb_textSize="17dp"
+                    android:layout_weight="1"
+                    android:layout_below="@+id/pending_frame"
+                    android:layout_alignParentStart="true"/>
 
             </RelativeLayout>
-
-
 
         </com.daimajia.swipe.SwipeLayout>
 

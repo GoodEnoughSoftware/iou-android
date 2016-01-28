@@ -7,8 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.wrongwaystudios.iou.DetailActivity;
 import com.wrongwaystudios.iou.MainActivity;
 import com.wrongwaystudios.iou.R;
@@ -29,6 +31,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     private ArrayList<Transaction> mDataset;
     private IOUStatus desiredStatus;
     private int layoutId;
+    protected TransactionsAdapter iouAdapter = this;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -78,6 +81,9 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             }
         });
 
+        SwipeLayout swiper = (SwipeLayout) holder.transactionView.findViewById(R.id.swipe_layout);
+        swiper.setSwipeEnabled(iou.getIouStatus() != IOUStatus.PENDING);
+
         TextView senderView = (TextView) holder.transactionView.findViewById(R.id.sender_text);
         TextView recipientView = (TextView) holder.transactionView.findViewById(R.id.recipient_text);
         TextView statusView = (TextView) holder.transactionView.findViewById(R.id.status_text);
@@ -85,7 +91,10 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         ImageView dueIcon = (ImageView) holder.transactionView.findViewById(R.id.due_icon);
         ImageView importantIcon = (ImageView) holder.transactionView.findViewById(R.id.important_icon);
         ImageView noteIcon = (ImageView) holder.transactionView.findViewById(R.id.note_icon);
-        FancyButton pendingButton = (FancyButton) holder.transactionView.findViewById(R.id.btn_accept);
+        LinearLayout pendingFrame = (LinearLayout) holder.transactionView.findViewById(R.id.pending_frame);
+        FancyButton acceptPendingButton = (FancyButton) holder.transactionView.findViewById(R.id.btn_accept);
+        FancyButton rejectPendingButton = (FancyButton) holder.transactionView.findViewById(R.id.btn_reject);
+        FancyButton waitingButton = (FancyButton) holder.transactionView.findViewById(R.id.btn_pending);
         FrameLayout checkFrame = (FrameLayout) holder.transactionView.findViewById(R.id.check_frame);
         FrameLayout editFrame = (FrameLayout) holder.transactionView.findViewById(R.id.edit_frame);
         FrameLayout notifyFrame = (FrameLayout) holder.transactionView.findViewById(R.id.notify_frame);
@@ -98,8 +107,9 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         statusView.setText(Globals.statusString(iou.getIouStatus()));
         amountView.setText("$" + df.format(iou.getAmount()));
         amountView.setTextColor(Globals.globalContext.getResources().getColor(textColor));
+        pendingFrame.setVisibility(iou.getIouStatus() == IOUStatus.PENDING && iou.getSenderUsername().equals(Globals.mainUser.getUsername())? View.VISIBLE : View.GONE);
+        waitingButton.setVisibility(iou.getIouStatus() == IOUStatus.PENDING && !iou.getSenderUsername().equals(Globals.mainUser.getUsername())? View.VISIBLE : View.GONE);
         dueIcon.setVisibility(iou.getDueDate() == null ? View.GONE : View.VISIBLE);
-        pendingButton.setVisibility(iou.getIouStatus() == IOUStatus.PENDING ? View.VISIBLE : View.GONE);
         importantIcon.setVisibility(View.GONE);
         noteIcon.setVisibility(iou.getNote() == null || iou.getNote().equals("") ? View.GONE : View.VISIBLE);
 
@@ -123,6 +133,26 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             @Override
             public void onClick(View v) {
                 ViewHelper.startIouNotifyOperation(position);
+            }
+        });
+        acceptPendingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Globals.mainUser.allIOUs.remove(position);
+                iouAdapter.notifyItemRemoved(position);
+                notifyDataSetChanged();
+                //iouAdapter.notifyDataSetChanged();
+                Globals.mainUser.acceptPendingIOU(iou.getId());
+            }
+        });
+        rejectPendingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Globals.mainUser.allIOUs.remove(position);
+                iouAdapter.notifyItemRemoved(position);
+                notifyDataSetChanged();
+                //iouAdapter.notifyDataSetChanged();
+                Globals.mainUser.rejectPendingIOU(iou.getId());
             }
         });
 

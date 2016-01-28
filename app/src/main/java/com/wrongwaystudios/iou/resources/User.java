@@ -1,11 +1,14 @@
 package com.wrongwaystudios.iou.resources;
 
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +34,8 @@ public class User {
     private final String BASE_NOTI_URL = "api/notifications/";
     private final String BASE_IOUS_ACT_URL = "api/ious/active/";
     private final String BASE_IOUS_PEN_URL = "api/ious/pending/";
+    private final String BASE_PEN_ACC_URL = "api/ious/accept/";
+    private final String BASE_PEN_REJ_URL = "api/ious/reject/";
 
     private final String clientIdField = "client_id";
     private final String clientSecretField = "client_secret";
@@ -128,6 +133,28 @@ public class User {
     public boolean getPendingTransactions(){
 
         return getIOUs(Globals.BASE_API_URL + BASE_IOUS_PEN_URL, IOUStatus.PENDING);
+
+    }
+
+    /**
+     * Accepts the pending iou
+     * @param iouId The IOU to accept
+     * @return whether or not this operation worked
+     */
+    public void acceptPendingIOU(String iouId){
+
+        new AcceptIouTask().execute(iouId);
+
+    }
+
+    /**
+     * Rejects the pending IOU
+     * @param iouId The IOU to reject
+     * @return whether or not this operation worked
+     */
+    public void rejectPendingIOU(String iouId){
+
+        new RejectIouTask().execute(iouId);
 
     }
 
@@ -271,4 +298,103 @@ public class User {
     public Bitmap getProfilePic() {
         return profilePic;
     }
+
+    /**
+     * Accepts an iou from the server
+     */
+    private class AcceptIouTask extends AsyncTask<String, Void, String> {
+
+        boolean iouAccept = false;
+
+        @Override
+        protected String doInBackground(String ... params) {
+
+            String iouId = params[0];
+
+            HashMap<String, String> parameters = new HashMap<>();
+            parameters.put("id", iouId);
+
+            try {
+                JSONObject result = Constructors.putData(Globals.BASE_API_URL + BASE_PEN_ACC_URL, parameters, Globals.authObject.getAccessToken());
+                if(result.has("success")){
+                    iouAccept = result.getBoolean("success");
+                }
+                iouAccept = false;
+            } catch (Exception e) {
+                iouAccept = false;
+            }
+
+            return "Success";
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            if(iouAccept){
+                Log.e("ACCEPT", "IOU was accepted");
+            } else {
+                Log.e("ACCEPT", "IOU was not accepted");
+            }
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+
+
+        }
+
+    }
+
+    /**
+     * Rejects an iou from the server
+     */
+    private class RejectIouTask extends AsyncTask<String, Void, String> {
+
+        boolean iouReject = false;
+
+        @Override
+        protected String doInBackground(String ... params) {
+
+            String iouId = params[0];
+
+            HashMap<String, String> parameters = new HashMap<>();
+            parameters.put("id", iouId);
+
+            try {
+                JSONObject result = Constructors.putData(Globals.BASE_API_URL + BASE_PEN_REJ_URL, parameters, Globals.authObject.getAccessToken());
+                if(result.has("success")){
+                    iouReject = result.getBoolean("success");
+                }
+                iouReject = false;
+            } catch (Exception e) {
+                iouReject = false;
+            }
+
+            return "Success";
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            if(iouReject){
+                Log.e("REJECT", "IOU was rejected");
+            } else {
+                Log.e("REJECT", "IOU was not rejected");
+            }
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+
+
+        }
+
+    }
+
 }

@@ -343,13 +343,79 @@ public class Constructors {
                 .post(body)
                 .addHeader("authorization", "Bearer " + authorization)
                 .addHeader("cache-control", "no-cache")
-                .addHeader("postman-token", "cc0eb45b-993d-b7d4-1f40-201302c38a9d")
                 .addHeader("content-type", "application/x-www-form-urlencoded")
                 .build();
 
         Response response = client.newCall(request).execute();
 
         return new JSONObject(response.body().string());
+
+    }
+
+    public static JSONObject putData(final String url, final HashMap<String, String> data, String authorization) throws IOException, JSONException{
+
+        HttpURLConnection conn = null;
+
+        try {
+
+            // Construct the POST
+            URL finalUrl = new URL(url);
+            conn = (HttpURLConnection) finalUrl.openConnection();
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setInstanceFollowRedirects(false);
+            conn.setUseCaches(false);
+            conn.setRequestMethod("PUT");
+
+            String postData = "";
+            for(String key : data.keySet()){
+                postData += key + "=" + data.get(key) + "&";
+            }
+            postData = postData.substring(0, postData.length() - 1);
+
+            Log.e("PUT", postData);
+
+            conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+            conn.setRequestProperty("Content-Length", "" + Integer.toString(postData.getBytes().length));
+            conn.setRequestProperty("charset","utf-8");
+
+            if(authorization != null){
+                conn.setRequestProperty("Authorization", "Bearer " + authorization);
+            }
+
+            // Begin writing to the server
+            DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+            wr.writeBytes(postData);
+            wr.flush();
+            wr.close();
+
+            //Log.e("WRITE", "");
+
+            //Log.e("SERVER:" , "" + conn.getResponseCode());
+
+            // Read the response
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            //Log.e("READ", "");
+
+            // Return the result
+            return new JSONObject(response.toString());
+        }
+        catch (Exception e) {
+            Log.e("******", "" + e);
+            return new JSONObject();
+        } finally {
+            if(conn != null){
+                conn.disconnect();
+            }
+        }
 
     }
 

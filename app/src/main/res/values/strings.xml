@@ -7,6 +7,10 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Sign in</string>
 
+    <!--string name="banner_ad_unit_id">ca-app-pub-5626721848828721/1263902499</string-->
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="google_app_id">AIzaSyC-k4yrShGUBlQXsidkCTf4BiSjtxXPT7A</string>
+
     <!-- Strings related to login -->
     <string name="login_username">Username</string>
     <string name="login_password">Password</string>
@@ -70,5 +74,12 @@
     <string name="detail_title">IOU from %s\n</string>
     <string name="iou_details_created_on">Created on %s</string>
     <string name="iou_detail_amount">$%s left</string>
+    <string name="forgive_title">Forgive IOU</string>
+    <string name="forgive_content">Are you sure you would like to make this IOU inactive? The payer will no longer owe you this amount.</string>
+    <string name="forgive_accept">Forgive</string>
+    <string name="forgive_cancel">Cancel</string>
+    <string name="forgive_bad_title">Cannot Forgive</string>
+    <string name="forgive_bad_content">You cannot forgive this IOU because you are the one who owes money.</string>
+    <string name="forgive_bad_ok">Ok</string>
 
 </resources>

@@ -1,6 +1,10 @@
 package com.wrongwaystudios.iou;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
@@ -10,14 +14,20 @@ import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.wrongwaystudios.iou.resources.Constructors;
 import com.wrongwaystudios.iou.resources.Globals;
 import com.wrongwaystudios.iou.resources.Transaction;
+
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -30,6 +40,10 @@ public class DetailActivity extends AppCompatActivity {
     // All view
     private TextView senderText = null;
     private TextView receiverText = null;
+
+    // Constants
+    private final String BASE_FORGIVE_URL = "api/ious/forgive/";
+    private final Context detailContext = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +106,13 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+        fabForgive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickForgive();
+            }
+        });
+
     }
 
     protected void onStart(){
@@ -112,7 +133,7 @@ public class DetailActivity extends AppCompatActivity {
         senderText.setText(lookingIOU.getSenderUsername());
         receiverText.setText(lookingIOU.getRecipientUsername());
 
-        String strDateFormat = "MMMM d, yyyy";
+        String strDateFormat = "MMMM dd, yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
         String creationText = sdf.format(lookingIOU.getCreated());
         createdOnText.setText(String.format(getResources().getString(R.string.iou_details_created_on), creationText));
@@ -142,8 +163,72 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Action when the forgive fab is clicked (shows a dialog to confirm)
+     */
+    private void clickForgive(){
+
+        if(lookingIOU.getSenderUsername().equals(Globals.mainUser.getUsername())){
+            new MaterialDialog.Builder(this)
+                    .title(R.string.forgive_bad_title)
+                    .content(R.string.forgive_bad_content)
+                    .positiveText(R.string.forgive_bad_ok)
+                    .build().show();
+        } else {
+            new MaterialDialog.Builder(this)
+                    .title(R.string.forgive_title)
+                    .content(R.string.forgive_content)
+                    .positiveText(R.string.forgive_accept)
+                    .negativeText(R.string.forgive_cancel)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            new ForgiveIOUTask().execute(lookingIOU);
+                        }
+                    })
+                    .build().show();
+        }
+
+    }
+
     private void displayInformation(){
 
+    }
+
+    private class ForgiveIOUTask extends AsyncTask<Transaction, Void, Void> {
+
+        boolean success = false;
+
+        @Override
+        protected Void doInBackground(Transaction ... params) {
+
+            String URL = Globals.BASE_API_URL + BASE_FORGIVE_URL;
+
+            HashMap<String, String> parameters = new HashMap<>();
+            parameters.put("id", params[0].getId());
+
+            try{
+
+                JSONObject result = Constructors.putData(URL, parameters, Globals.authObject.getAccessToken());
+
+                if(result.has("success")){
+                    success = result.getBoolean("success");
+                }
+
+            } catch (Exception e) {
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(success){
+                ((Activity) detailContext).finish();
+            }
+        }
     }
 
 }

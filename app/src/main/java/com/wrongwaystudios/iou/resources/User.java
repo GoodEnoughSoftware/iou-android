@@ -29,6 +29,7 @@ public class User {
     private String email;
     private String phoneNumber;
     private Bitmap profilePic;
+    private double netWorth;
 
     private final String BASE_USER_URL = "api/users";
     private final String BASE_NOTI_URL = "api/notifications/";
@@ -36,6 +37,7 @@ public class User {
     private final String BASE_IOUS_PEN_URL = "api/ious/pending/";
     private final String BASE_PEN_ACC_URL = "api/ious/accept/";
     private final String BASE_PEN_REJ_URL = "api/ious/reject/";
+    private final String BASE_NET_WORTH_URL = "api/users/total/";
 
     private final String clientIdField = "client_id";
     private final String clientSecretField = "client_secret";
@@ -44,6 +46,7 @@ public class User {
     private final String firstNameField = "firstName";
     private final String lastNameField = "lastName";
     private final String successField = "success";
+    private final String totalNetField = "total";
 
     // IOU Fields
     private final String idField = "_id";
@@ -267,6 +270,29 @@ public class User {
 
     }
 
+    /**
+     * Retreives the net worth of the current user
+     * @return whether or not this operation was successful
+     */
+    public boolean getNetWorthTask(){
+
+        JSONObject result = Constructors.getData(Globals.BASE_API_URL + BASE_NET_WORTH_URL, Globals.authObject.getAccessToken());
+
+        try {
+            if(result.has(totalNetField)){
+                netWorth = result.getDouble(totalNetField);
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch (Exception e) {
+            return false;
+        }
+
+    }
+
     public boolean isInDB() {
         return inDB;
     }
@@ -298,6 +324,8 @@ public class User {
     public Bitmap getProfilePic() {
         return profilePic;
     }
+
+    public double getNetWorth() { return netWorth; }
 
     /**
      * Accepts an iou from the server

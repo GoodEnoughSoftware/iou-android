@@ -142,6 +142,25 @@ public class DetailActivity extends AppCompatActivity {
         DecimalFormat df = new DecimalFormat("#.00");
         amountDetail.setText(String.format(getResources().getString(R.string.iou_detail_amount), df.format(lookingIOU.getAmount())));
 
+        if(lookingIOU.getDueDate() != null){
+            String dueDateFormat = "MMMM,dd,yyyy";
+            SimpleDateFormat dueDF = new SimpleDateFormat(dueDateFormat);
+            String[] dueDateInfo = dueDF.format(lookingIOU.getDueDate()).split(",");
+            TextView monthText = (TextView) findViewById(R.id.month_text);
+            TextView numberText = (TextView) findViewById(R.id.number_text);
+            TextView yearText = (TextView) findViewById(R.id.day_text);
+            monthText.setText(dueDateInfo[0]);
+            numberText.setText(dueDateInfo[1]);
+            yearText.setText(dueDateInfo[2]);
+        } else {
+            findViewById(R.id.card_view).setVisibility(View.GONE);
+        }
+
+        if(lookingIOU.getNote() != null && !lookingIOU.getNote().equals("")){
+            TextView description = (TextView) findViewById(R.id.content_view);
+            description.setText(lookingIOU.getNote());
+        }
+
         if(isEditing){
             editIOU();
         }

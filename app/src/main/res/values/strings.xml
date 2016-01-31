@@ -48,6 +48,11 @@
     <string name="nav_edit_profile">Edit Profile</string>
     <string name="nav_send_invite">Send Invite</string>
     <string name="nav_sign_out">Sign Out</string>
+    <string name="nav_footer_title">Net worth:</string>
+    <string name="nav_footer_content_default">$0.00</string>
+    <string name="nav_footer_content_pref_pos">$%s</string>
+    <string name="nav_footer_content_pref_neg">- $%s</string>
+    <string name="unknown">Unknown</string>
 
     <!-- Strings related to the IOU creation activity -->
     <string name="title_activity_create_iou">Create IOU</string>
@@ -62,13 +67,12 @@
     <string name="iou_create_receiver_error">Must enter a valud user</string>
     <string name="iou_create_error_title">Create Error</string>
     <string name="iou_create_error_content">There was an error creating this IOU (please try again later).</string>
-    <string name="iou_create_error_ok">Ok</string>
+    <string name="iou_create_error_ok">OK</string>
 
     <!-- Strings related to the Pending IOUs -->
     <string name="pending_reject">REJECT</string>
     <string name="pending_accept">ACCEPT</string>
     <string name="pending_waiting">WAITING FOR REPLY</string>
-
 
     <!-- Strings related to the Detail Activity -->
     <string name="detail_title">IOU from %s\n</string>
@@ -81,5 +85,6 @@
     <string name="forgive_bad_title">Cannot Forgive</string>
     <string name="forgive_bad_content">You cannot forgive this IOU because you are the one who owes money.</string>
     <string name="forgive_bad_ok">Ok</string>
+    <string name="iou_detail_desc_default">No description given</string>
 
 </resources>

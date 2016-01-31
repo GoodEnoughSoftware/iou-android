@@ -35,6 +35,7 @@ import com.wrongwaystudios.iou.resources.TransactionsAdapter;
 import com.wrongwaystudios.iou.resources.User;
 import com.wrongwaystudios.iou.resources.UserNotification;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
@@ -225,6 +226,9 @@ public class MainActivity extends AppCompatActivity
 
                 // Get their active IOUs (asynchronously)
                 new GetActiveIousTask().execute();
+
+                new GetNetWorthTask().execute();
+
             }
 
         }
@@ -296,6 +300,8 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    // ASYNC TASKS ---------------------------------------------------------------------------------
 
     /**
      * Downloads notifications from the server
@@ -449,6 +455,50 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+
+    /**
+     * Gets the net worth from the server
+     */
+    private class GetNetWorthTask extends AsyncTask<Void, Void, String> {
+
+        boolean netWorthGet = false;
+
+        @Override
+        protected String doInBackground(Void ... params) {
+
+            netWorthGet = Globals.mainUser.getNetWorthTask();
+
+            return "Success";
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            if(netWorthGet){
+                TextView netWorthField = (TextView) findViewById(R.id.net_worth_field);
+                DecimalFormat df = new DecimalFormat("#.00");
+                if(Globals.mainUser.getNetWorth() < 0){
+                    netWorthField.setText(String.format(getResources().getString(R.string.nav_footer_content_pref_neg), df.format(Math.abs(Globals.mainUser.getNetWorth()))));
+                    netWorthField.setTextColor(getResources().getColor(R.color.colorRed));
+                }
+                else {
+                    netWorthField.setText(String.format(getResources().getString(R.string.nav_footer_content_pref_pos), df.format(Globals.mainUser.getNetWorth())));
+                    netWorthField.setTextColor(getResources().getColor(R.color.colorGreen));
+                }
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+
+
+        }
+
+    }
+
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Shows the IOU in the main adapter

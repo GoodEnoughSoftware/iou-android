@@ -20,8 +20,60 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:clipToPadding="false"
+        android:paddingBottom="52dp"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer"/>
+        app:menu="@menu/activity_main_drawer">
+        
+        <LinearLayout
+            android:clickable="true"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="-52dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/nav_footer_title"
+                    android:id="@+id/textView3"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="-1dp"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="8dp"
+                    android:textSize="18sp"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/nav_footer_content_default"
+                    android:id="@+id/net_worth_field"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="-1dp"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        
+    </android.support.design.widget.NavigationView>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view_right"

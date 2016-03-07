@@ -42,9 +42,9 @@ public class CreateIOU extends AppCompatActivity implements DatePickerDialog.OnD
     private UserSearchObject[] senderUsers;
     private UserSearchObject[] receiverUsers;
 
-    private String BASE_FIND_URL = "api/users/find?";
-    private String BASE_CREATE_IOU_SELF_URL = "api/ious/self/";
-    private String BASE_CREATE_IOU_OTHER_URL = "api/ious/other/";
+    private final String BASE_FIND_URL = "api/users/find?";
+    private final String BASE_CREATE_IOU_SELF_URL = "api/ious/self/";
+    private final String BASE_CREATE_IOU_OTHER_URL = "api/ious/other/";
     private final int QUERY_LIMIT = 10;
 
     private final String USERNAME_FIELD = "username";

@@ -56,6 +56,9 @@
 
     <!-- Strings related to the IOU creation activity -->
     <string name="title_activity_create_iou">Create IOU</string>
+    <string name="iou_create_designate_title">I will</string>
+    <string name="iou_create_designate_sender">owe money</string>
+    <string name="iou_create_designate_receive">receive money</string>
     <string name="iou_create_amount_hint">Amount ($)</string>
     <string name="iou_create_recipient_hint">Recipient</string>
     <string name="iou_create_sender_hint">Sender</string>
@@ -86,5 +89,6 @@
     <string name="forgive_bad_content">You cannot forgive this IOU because you are the one who owes money.</string>
     <string name="forgive_bad_ok">Ok</string>
     <string name="iou_detail_desc_default">No description given</string>
+    <string name="iou_detail_payments_title">Payments</string>
 
 </resources>

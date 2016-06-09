@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 import com.wrongwaystudios.iou.resources.Globals;
@@ -37,6 +36,8 @@ import com.wrongwaystudios.iou.resources.UserNotification;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -64,6 +65,14 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
+        // Set fonts
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/SourceSansPro-Regular.otf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+
+        // Set content view
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -198,8 +207,15 @@ public class MainActivity extends AppCompatActivity
             Globals.mainUser = new User(Globals.authObject.getUsername());
             usernameLabel.setText(Globals.mainUser.getUsername());
             fullNameLabel.setText(Globals.mainUser.getFullName());
+
             // Get their notifications (asynchronously)
             new GetNotificationsTask().execute();
+
+            // Get their active IOUs (asynchronously)
+            new GetActiveIousTask().execute();
+
+            // Get their net worth (asynchronously)
+            new GetNetWorthTask().execute();
 
             AdRequest adRequest = new AdRequest.Builder().build();
             mAdView.loadAd(adRequest);
@@ -216,10 +232,11 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 ((Activity) thisActivity).finish();
             } else {
-                // Create a user object
                 Globals.mainUser = new User(Globals.authObject.getUsername());
-                usernameLabel.setText(Globals.authObject.getUsername());
+                usernameLabel.setText(Globals.mainUser.getUsername());
+                fullNameLabel.setText(Globals.mainUser.getFullName());
 
+                iouRefreshLayout.setRefreshing(true);
 
                 // Get their notifications (asynchronously)
                 new GetNotificationsTask().execute();
@@ -227,7 +244,11 @@ public class MainActivity extends AppCompatActivity
                 // Get their active IOUs (asynchronously)
                 new GetActiveIousTask().execute();
 
+                // Get their net worth (asynchronously)
                 new GetNetWorthTask().execute();
+
+                AdRequest adRequest = new AdRequest.Builder().build();
+                mAdView.loadAd(adRequest);
 
             }
 

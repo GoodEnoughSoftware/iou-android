@@ -14,7 +14,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.RadioButton;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
@@ -132,6 +134,34 @@ public class CreateIOU extends AppCompatActivity implements DatePickerDialog.OnD
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
                     showDatePicker();
+                }
+            }
+        });
+
+        // Configure the radio button actions
+        RadioButton iOwe = (RadioButton) findViewById(R.id.owe_radio);
+        RadioButton uOwe = (RadioButton) findViewById(R.id.receive_radio);
+
+        iOwe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+
+                }
+                else {
+
+                }
+            }
+        });
+
+        uOwe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+
+                }
+                else {
+
                 }
             }
         });

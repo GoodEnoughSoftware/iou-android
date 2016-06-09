@@ -45,11 +45,11 @@
             android:layout_alignStart="@android:id/text1"
             android:textStyle="italic"/>
 
-        <FrameLayout
+        <!--FrameLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/divider"
             android:layout_margin="8dp">
-        </FrameLayout>
+        </FrameLayout-->
 
 </LinearLayout>

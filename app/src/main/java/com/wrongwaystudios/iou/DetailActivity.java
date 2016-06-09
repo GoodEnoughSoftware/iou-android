@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -133,7 +134,7 @@ public class DetailActivity extends AppCompatActivity {
         senderText.setText(lookingIOU.getSenderUsername());
         receiverText.setText(lookingIOU.getRecipientUsername());
 
-        String strDateFormat = "MMMM dd, yyyy";
+        String strDateFormat = "MMMM d, yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
         String creationText = sdf.format(lookingIOU.getCreated());
         createdOnText.setText(String.format(getResources().getString(R.string.iou_details_created_on), creationText));
@@ -142,8 +143,10 @@ public class DetailActivity extends AppCompatActivity {
         DecimalFormat df = new DecimalFormat("#.00");
         amountDetail.setText(String.format(getResources().getString(R.string.iou_detail_amount), df.format(lookingIOU.getAmount())));
 
+        Log.e("Due Date", "" + lookingIOU.getDueDate());
+
         if(lookingIOU.getDueDate() != null){
-            String dueDateFormat = "MMMM,dd,yyyy";
+            String dueDateFormat = "MMMM,d,yyyy";
             SimpleDateFormat dueDF = new SimpleDateFormat(dueDateFormat);
             String[] dueDateInfo = dueDF.format(lookingIOU.getDueDate()).split(",");
             TextView monthText = (TextView) findViewById(R.id.month_text);
@@ -153,12 +156,15 @@ public class DetailActivity extends AppCompatActivity {
             numberText.setText(dueDateInfo[1]);
             yearText.setText(dueDateInfo[2]);
         } else {
-            findViewById(R.id.card_view).setVisibility(View.GONE);
+            findViewById(R.id.due_day_view).setVisibility(View.GONE);
         }
 
+        TextView description = (TextView) findViewById(R.id.content_view);
         if(lookingIOU.getNote() != null && !lookingIOU.getNote().equals("")){
-            TextView description = (TextView) findViewById(R.id.content_view);
             description.setText(lookingIOU.getNote());
+        }
+        else {
+            description.setText(getResources().getString(R.string.iou_detail_desc_default));
         }
 
         if(isEditing){

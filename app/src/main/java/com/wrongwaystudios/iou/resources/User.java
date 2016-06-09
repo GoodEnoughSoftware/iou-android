@@ -281,6 +281,7 @@ public class User {
         try {
             if(result.has(totalNetField)){
                 netWorth = result.getDouble(totalNetField);
+                Log.e("WORTH", "" + netWorth);
                 return true;
             }
             else {
@@ -288,6 +289,7 @@ public class User {
             }
         }
         catch (Exception e) {
+            Log.e("******", e.getMessage());
             return false;
         }
 

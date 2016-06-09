@@ -16,11 +16,42 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp">
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="32dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/iou_create_designate_title"
+                android:id="@+id/textView5"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/iou_create_designate_sender"
+                android:id="@+id/owe_radio"
+                android:textSize="18sp"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/iou_create_designate_receive"
+                android:id="@+id/receive_radio"
+                android:textSize="18sp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
         <com.rengwuxian.materialedittext.MaterialAutoCompleteTextView
             android:id="@+id/sender_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             app:met_iconLeft="@drawable/ic_person_outline_black"
             app:met_floatingLabel="highlight"
             android:hint="@string/iou_create_sender_hint"/>
